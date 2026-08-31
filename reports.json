@@ -34,15 +34,24 @@
     "eventDate": "2026-08-30",
     "version": "v1",
     "status": "调查中",
+    "statusEn": "Under investigation",
     "severity": "critical",
     "chain": "Cronos",
     "category": "Oracle Manipulation / Protocol Solvency",
     "summary": "停链块显示攻击仓位总借款约 1.2085 亿美元、账户短缺约 1.1889 亿美元；约 7,431 万美元攻击相关资产可跟踪，但并非最终损失。",
+    "titleEn": "Tectonic Incident Risk Report",
+    "summaryEn": "At the chain-halt block, the attack position had approximately $120.85 million of borrowings and a $118.89 million account shortfall. Roughly $74.31 million of attack-related assets were traceable, but that is not the final loss.",
     "metrics": [
       { "label": "链上短缺", "value": "$118.89m" },
       { "label": "可跟踪资产", "value": "$74.31m" }
     ],
-    "url": "reports/tectonic-2026-08-30/"
+    "metricsEn": [
+      { "label": "On-chain shortfall", "value": "$118.89m" },
+      { "label": "Traceable assets", "value": "$74.31m" }
+    ],
+    "url": "reports/tectonic-2026-08-30/",
+    "enUrl": "reports/tectonic-2026-08-30/en/",
+    "languages": ["zh-CN", "en"]
   },
   {
     "slug": "moonwell-mamo-2026-08-27",
@@ -52,14 +61,23 @@
     "eventDate": "2026-08-27",
     "version": "v1",
     "status": "调查中",
+    "statusEn": "Under investigation",
     "severity": "critical",
     "chain": "Base",
     "category": "Oracle Manipulation / Lending Market Shortfall",
     "summary": "Base 截止区块显示事件账户链上 shortfall 约 912.4 万美元；872.9 万 USDC 是跨链退出毛额，并非官方损失或攻击者净利润。",
+    "titleEn": "Moonwell MAMO Incident Risk Report",
+    "summaryEn": "At the Base cutoff block, the incident account had an on-chain shortfall of approximately $9.124 million. The 8.729 million USDC cross-chain transfer is gross outflow—not an official loss figure or attacker net profit.",
     "metrics": [
       { "label": "链上 Shortfall", "value": "$9.124m" },
       { "label": "跨链毛额", "value": "$8.729m" }
     ],
-    "url": "reports/moonwell-mamo-2026-08-27/"
+    "metricsEn": [
+      { "label": "On-chain shortfall", "value": "$9.124m" },
+      { "label": "Cross-chain gross", "value": "$8.729m" }
+    ],
+    "url": "reports/moonwell-mamo-2026-08-27/",
+    "enUrl": "reports/moonwell-mamo-2026-08-27/en/",
+    "languages": ["zh-CN", "en"]
   }
 ]

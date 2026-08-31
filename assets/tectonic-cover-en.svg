@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#102640"/>
+      <stop offset="0.72" stop-color="#183d64"/>
+      <stop offset="1" stop-color="#1c587d"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="88%" cy="5%" r="58%"><stop offset="0" stop-color="#4ea5d6" stop-opacity=".4"/><stop offset="1" stop-color="#4ea5d6" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/><rect width="1200" height="630" fill="url(#glow)"/>
+  <g transform="translate(888 76)" fill="none" stroke="#92cde9" stroke-opacity=".22">
+    <circle cx="125" cy="125" r="124"/><circle cx="125" cy="125" r="82"/><circle cx="125" cy="125" r="40"/>
+    <path d="M125 0v250M0 125h250M37 37l176 176M213 37L37 213"/>
+  </g>
+  <text x="76" y="94" fill="#9ed3f3" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="20" font-weight="700" letter-spacing="3">EVENT RISK · PROTOCOL SOLVENCY</text>
+  <text x="76" y="224" fill="#ffffff" font-family="Georgia,serif" font-size="78" font-weight="700">Tectonic</text>
+  <text x="76" y="306" fill="#ffffff" font-family="Georgia,serif" font-size="58" font-weight="700">Incident Risk Report</text>
+  <g transform="translate(76 377)">
+    <rect width="306" height="103" rx="16" fill="#fff" fill-opacity=".08" stroke="#fff" stroke-opacity=".18"/>
+    <text x="20" y="34" fill="#bcd7e8" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18">On-chain shortfall</text>
+    <text x="20" y="78" fill="#ffb6b6" font-family="Georgia,serif" font-size="39" font-weight="700">$118.89m</text>
+  </g>
+  <g transform="translate(399 377)">
+    <rect width="306" height="103" rx="16" fill="#fff" fill-opacity=".08" stroke="#fff" stroke-opacity=".18"/>
+    <text x="20" y="34" fill="#bcd7e8" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18">Traceable assets</text>
+    <text x="20" y="78" fill="#ffd087" font-family="Georgia,serif" font-size="39" font-weight="700">$74.31m</text>
+  </g>
+  <line x1="76" y1="534" x2="1124" y2="534" stroke="#fff" stroke-opacity=".18"/>
+  <text x="76" y="578" fill="#c9dfed" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="20">v1 · 2026-08-31 · On-chain evidence and recovery scenarios</text>
+</svg>
