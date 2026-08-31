@@ -1,0 +1,6 @@
+.DS_Store
+.codegraph/
+*.artifact.json
+*_事故风险报告_v*.html
+*Telegram Export*/
+

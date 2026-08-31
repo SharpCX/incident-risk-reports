@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Tectonic 事故风险报告 v1 · 2026-08-31</title>
+  <meta name="description" content="Tectonic 事故的链上短缺、攻击相关资产、流动性与恢复情景分析。数据截止 2026-08-31。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Tectonic 事故风险报告">
+  <meta property="og:description" content="链上短缺约 $118.89m；已识别攻击相关资产约 $74.31m。两者不是同一分母。">
+  <meta property="og:url" content="https://sharpcx.github.io/incident-risk-reports/reports/tectonic-2026-08-30/">
+  <meta property="og:image" content="https://sharpcx.github.io/incident-risk-reports/assets/tectonic-cover.png">
+  <meta property="article:published_time" content="2026-08-31T09:59:15+08:00">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://sharpcx.github.io/incident-risk-reports/reports/tectonic-2026-08-30/">
+  <style>
+    :root{--ink:#122033;--muted:#617086;--line:#dfe5ec;--paper:#fff;--wash:#f4f7fa;--navy:#17365d;--blue:#1877b9;--red:#bd3a3a;--amber:#a96200;--green:#247754;--purple:#6d55a2;--shadow:0 16px 48px rgba(20,38,63,.08)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(180deg,#eef3f7 0,#f8fafc 340px,#f4f7fa 100%);color:var(--ink);font:15px/1.68 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Noto Sans CJK SC",sans-serif}
+    a{color:#0c64a2;text-decoration:none;border-bottom:1px solid rgba(12,100,162,.3)}a:hover{border-color:#0c64a2}.wrap{width:min(1180px,calc(100% - 36px));margin:auto}.hero{padding:58px 0 38px;background:radial-gradient(circle at 88% 4%,rgba(48,123,179,.22),transparent 30%),linear-gradient(135deg,#102640,#183d64);color:#fff}.eyebrow{letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:#9ed3f3;font-weight:750}.hero h1{font-family:Georgia,"Songti SC",serif;font-size:clamp(34px,5vw,60px);line-height:1.08;max-width:900px;margin:12px 0 18px}.hero p{max-width:850px;color:#d9e7f2;font-size:17px}.stamp{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.stamp span{border:1px solid rgba(255,255,255,.24);border-radius:999px;padding:6px 11px;font-size:12px;color:#dceaf4;background:rgba(255,255,255,.06)}
+    .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:26px;align-items:start;padding:28px 0 64px}.toc{position:sticky;top:18px;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:15px;padding:16px;box-shadow:var(--shadow);max-height:calc(100vh - 36px);overflow:auto}.toc strong{display:block;margin-bottom:8px}.toc a{display:block;border:0;color:#506178;font-size:12px;padding:4px 0}.toc a:hover{color:var(--blue)}main{min-width:0}.section{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:26px 28px;margin-bottom:18px;box-shadow:0 7px 28px rgba(25,44,70,.04)}.section h2{font-family:Georgia,"Songti SC",serif;font-size:25px;line-height:1.25;margin:0 0 15px;color:#163858}.section h3{font-size:16px;margin:22px 0 8px;color:#203b5b}.section p{margin:9px 0}.lede{font-size:18px;line-height:1.65;color:#18324f}.note{border-left:4px solid var(--amber);background:#fff8ec;padding:12px 15px;border-radius:0 10px 10px 0;margin:14px 0}.danger{border-left-color:var(--red);background:#fff4f4}.good{border-left-color:var(--green);background:#f0faf5}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.card{background:var(--wash);border:1px solid var(--line);border-radius:13px;padding:15px}.card small{display:block;color:var(--muted);margin-bottom:7px}.card b{font-family:Georgia,serif;font-size:25px;line-height:1.1;color:var(--navy)}.card.red b{color:var(--red)}.card.amber b{color:var(--amber)}.card.green b{color:var(--green)}
+    .label{display:inline-block;font-weight:750;font-size:12px;padding:2px 7px;border-radius:5px;margin-right:4px;white-space:nowrap}.official{background:#e7f1fa;color:#175c8b}.onchain{background:#e9f6ef;color:#1e6b49}.media{background:#f4edf9;color:#684391}.infer{background:#fff2df;color:#8b5700}.rumor{background:#fbe8e8;color:#9c3030}.subtle{color:var(--muted);font-size:13px}.mono{font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;overflow-wrap:anywhere}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px;margin:14px 0}table{width:100%;border-collapse:collapse;min-width:720px;font-size:13px}th{background:#eef3f7;text-align:left;color:#344960;font-weight:750;position:sticky;top:0}th,td{padding:10px 11px;border-bottom:1px solid var(--line);vertical-align:top}tr:last-child td{border:0}td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}.chip{display:inline-block;border:1px solid var(--line);background:#fff;border-radius:999px;padding:2px 7px;font-size:11px;color:#506178}.bars{margin:16px 0}.bar-row{display:grid;grid-template-columns:225px 1fr 112px;gap:10px;align-items:center;margin:9px 0}.bar-track{height:14px;border-radius:999px;background:#e8edf2;overflow:hidden}.bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#1b79b6,#45a4c7)}.bar-fill.red{background:linear-gradient(90deg,#bb3a3a,#e16c5b)}.bar-fill.amber{background:linear-gradient(90deg,#a96200,#df9a28)}.bar-value{text-align:right;font-variant-numeric:tabular-nums}.steps{list-style:none;padding:0;margin:8px 0}.steps li{position:relative;padding:0 0 17px 29px;border-left:2px solid #d9e3eb;margin-left:7px}.steps li:last-child{border-left-color:transparent}.steps li:before{content:"";position:absolute;width:12px;height:12px;background:#2180b8;border:3px solid #dff1fb;border-radius:50%;left:-7px;top:5px}.steps time{font-weight:750;color:#244969}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}.source-list{columns:2;column-gap:30px}.source-list li{break-inside:avoid;margin-bottom:7px}.footer{color:#6a788b;text-align:center;font-size:12px;padding:10px 0 42px}.kicker{font-size:12px;color:#6a788b;text-transform:uppercase;letter-spacing:.1em}.callout-number{font:700 42px/1 Georgia,serif;color:var(--navy)}ul{padding-left:20px}li{margin:5px 0}
+    .siteback{display:inline-flex;align-items:center;gap:6px;color:#c8e2f2;border:0;font-size:13px;margin-bottom:22px}.siteback:hover{color:#fff;border:0}
+    @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}.grid{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}.source-list{columns:1}}@media(max-width:560px){.wrap{width:min(100% - 22px,1180px)}.hero{padding-top:38px}.section{padding:21px 18px}.grid{grid-template-columns:1fr}.bar-row{grid-template-columns:1fr}.bar-value{text-align:left}.source-list{padding-left:20px}}
+    @media print{body{background:#fff;font-size:10.5pt}.hero{padding:24px 0;background:#fff;color:#111;border-bottom:2px solid #123}.hero p,.stamp span,.eyebrow{color:#333}.layout{display:block;padding-top:14px}.toc{display:none}.section{box-shadow:none;border:0;border-radius:0;padding:12px 0;margin:0;page-break-inside:auto}.table-wrap{break-inside:avoid}.grid,.two{break-inside:avoid}a{color:#111;border:0}.source-list{columns:2}}
+  </style>
+</head>
+<body>
+  <header class="hero"><div class="wrap">
+    <a class="siteback" href="../../">← 返回报告档案</a>
+    <div class="eyebrow">Event Risk / Protocol Solvency / Oracle Manipulation</div>
+    <h1>Tectonic 事故风险报告</h1>
+    <p>一个比“约 7,400 万美元攻击”更重要的结论：可跟踪攻击者资产与 Tectonic 攻击仓位的链上短缺是两个不同分母。本报告以停链块合约状态为主线，分开“官方说了什么”、“链上证明了什么”和“尚未知道什么”。</p>
+    <div class="stamp"><span>v1 · 2026-08-31</span><span>数据截止 09:59:15 CST (+08:00)</span><span>Cronos 区块 90,907,150</span><span>Ethereum 区块 25,872,114</span></div>
+  </div></header>
+  <div class="wrap layout">
+    <nav class="toc"><strong>目录</strong>
+      <a href="#s1">1. 标题与数据截止</a><a href="#s2">2. Executive Summary</a><a href="#s3">3. 范围与证据</a><a href="#s4">4. 项目背景与策略</a><a href="#s5">5. 储备、负债与透明度</a><a href="#s6">6. 事件时间线与路径</a><a href="#s7">7. 当前协议与兑付</a><a href="#s8">8. 完整影响范围</a><a href="#s9">9. 实时协议敞口</a><a href="#s10">10. 价格、流动性与清算</a><a href="#s11">11. 恢复情景</a><a href="#s12">12. 历史案例</a><a href="#s13">13. 社区情绪</a><a href="#s14">14. 独立思考</a><a href="#s15">15. 风险行动与监控</a><a href="#s16">16. Caveats 与来源</a>
+    </nav>
+    <main>
+      <section class="section" id="s1"><div class="kicker">01 / Cutoff</div><h2>标题与数据截止</h2>
+        <p><span class="label onchain">【链上可验证】</span>Cronos 物质数据块为 <a href="https://cronoscan.com/block/90907150">90,907,150</a>，时间 <b>2026-08-30 14:32:47 UTC</b>（22:32:47 CST），区块哈希 <span class="mono">0xab63e57c…ff31ee</span>。截止 2026-08-31 09:59:15 CST，PublicNode 与 dRPC 都返回该同一最新块，官方 RPC 返回 HTTP 503。</p>
+        <p><span class="label onchain">【链上可验证】</span>以太坊去向地址在区块 <a href="https://etherscan.io/block/25872114">25,872,114</a>（2026-08-31 01:56:23 UTC）的余额用作跨链资产参考。</p>
+      </section>
+
+      <section class="section" id="s2"><div class="kicker">02 / Decision First</div><h2>Executive Summary</h2>
+        <p class="lede"><b>目前不能把 7,400 万美元当作“最终损失”。</b>停链块内，攻击仓位的协议 oracle 计价总借款约 <b>1.2085 亿美元</b>，风险引擎返回账户短缺约 <b>1.1889 亿美元</b>；另有约 <b>7,431 万美元</b>攻击相关资产可跟踪。后者可能是回收池，不是负债分母。</p>
+        <div class="grid">
+          <div class="card red"><small>攻击仓位链上短缺</small><b>$118.89m</b></div>
+          <div class="card"><small>攻击仓位总借款</small><b>$120.85m</b></div>
+          <div class="card amber"><small>已识别攻击相关资产</small><b>$74.31m</b></div>
+          <div class="card green"><small>Cronos 最后块距截止</small><b>11.44h</b></div>
+        </div>
+        <div class="bars">
+          <div class="bar-row"><span>协议账户短缺</span><div class="bar-track"><div class="bar-fill red" style="width:98.4%"></div></div><span class="bar-value">$118.89m</span></div>
+          <div class="bar-row"><span>已识别攻击者资产</span><div class="bar-track"><div class="bar-fill amber" style="width:61.5%"></div></div><span class="bar-value">$74.31m</span></div>
+        </div>
+        <ul>
+          <li><span class="label official">【官方确认】</span><a href="https://x.com/TectonicFi/status/2094072821630799989">Tectonic</a> 称事件正在调查，要求用户在确认安全前不要与协议交互；根因、官方损失、恢复时间、偿付与法律路径均未披露。</li>
+          <li><span class="label official">【官方确认】</span><a href="https://x.com/CronosNetwork/status/2094072333434769703">Cronos Network</a> 确认发现 Tectonic exploit 并停链。</li>
+          <li><span class="label onchain">【链上可验证】</span>停链块的受影响市场中，<code>borrowPaused</code> 与 <code>mintPaused</code> 仍为 false；当时的实际隔离手段是全链停摆，不是协议内暂停。</li>
+          <li><span class="label infer">【机制推断】</span>即使所有已识别资产都能回收，机械模型仍留下约 <b>4,457 万美元</b>残余短缺；但它不是最终赔付数，因为尚未纳入注资、保险、其他账户还款、资产冻结、法律成本或未识别资产。</li>
+        </ul>
+      </section>
+
+      <section class="section" id="s3"><div class="kicker">03 / Evidence</div><h2>范围与证据词典</h2>
+        <div class="two"><div><p><span class="label official">【官方确认】</span>项目公告、官方文档、治理与明确恢复条款。</p><p><span class="label onchain">【链上可验证】</span>合约调用、事件日志、余额和 RPC 结果；每个数值绑定区块、单位和小数位。</p><p><span class="label media">【媒体报道】</span>媒体或安全研究员的尚未获官方确认结论。</p></div><div><p><span class="label infer">【机制推断】</span>由合约状态、产品设计和资产流向推导的因果或情景，不写成已确认根因。</p><p><span class="label rumor">【社区传言】</span>未证实的赔付、回滚、对手方身份或最终损失数；不进入定量结论。</p></div></div>
+        <p><b>范围</b>：Tectonic 主池风险引擎与 18 个列入市场（重点展示攻击仓位所用 10 个）、VVS TONIC/WCRO 与 USDT/USDC 池、Cronos 停链、以太坊跨链地址。事件前 DefiLlama TVL 约 1.217 亿美元只作历史基线，不当作当前可赎回资产。</p>
+      </section>
+
+      <section class="section" id="s4"><div class="kicker">04 / Product</div><h2>项目背景与策略</h2>
+        <p><span class="label official">【官方确认】</span><a href="https://tectonic.gitbook.io/docs/introduction/faqs">Tectonic 文档</a>将协议定义为 Compound 分叉的货币市场。用户供应底层资产后获得 tToken；兑回时 tToken 按交换率燃烧。贷款能力由抵押数量、抵押因子与 price oracle 共同决定。</p>
+        <p>收益来源是借款利息与 TONIC 激励；风险不仅是智能合约，还包括低流动性抵押品的价格发现、oracle 更新、清算深度、跨链资产、集中化运营响应和法律回收。文档称内部 oracle 每小时两次或在价格变动 1% 时更新，但没有等价保证它能抵御薄流动性市场的操纵。</p>
+      </section>
+
+      <section class="section" id="s5"><div class="kicker">05 / Balance Sheet</div><h2>储备、负债与透明度</h2>
+        <div class="note"><b>不能从 tToken 账面交换率推出“可 1:1 赎回”。</b>市场账面资产通常是 <code>cash + totalBorrows - reserves</code>，但攻击账户的巨额借款可能不再具有全额经济价值。</div>
+        <p><span class="label onchain">【链上可验证】</span>攻击抵押账户 <a href="https://cronoscan.com/address/0x2dc6A36F4e5eeEFE112C01569de96dEa496Bb618"><span class="mono">0x2dc6…b618</span></a> 持有约 <b>326.414 万亿 TONIC</b> 的 tTONIC 账面抵押。停链块 oracle 价 <b>$0.000000030067</b>，账面市值约 $9.81m；经 20% 抵押因子后借款能力仅约 $1.96m。</p>
+        <p><span class="label official">【官方确认】</span>截止时点没有公布事件后储备、保险、资本注入、损失承担或用户赔付方案。因此本报告不计算任何“当前覆盖率”。</p>
+      </section>
+
+      <section class="section" id="s6"><div class="kicker">06 / Sequence</div><h2>事件时间线与失败路径</h2>
+        <ol class="steps">
+          <li><time>20:38:56 CST · 区块 90,896,190</time><br><span class="label onchain">【链上可验证】</span><a href="https://cronoscan.com/tx/0x0fce5ae8d2eeb82c838e750d0e25af1564a2c7d05bf843dd1cfea102ce587d06">TONIC 借入与铸造组合交易</a>：借款账户 <span class="mono">0xd3aa…f1f3</span> 循环借入 TONIC，并由 <span class="mono">0x2dc6…b618</span> 铸造 tTONIC。</li>
+          <li><time>20:49:39–20:50:26 CST · 区块 90,897,110–90,897,180</time><br><span class="label onchain">【链上可验证】</span>34.238m USDT 与 41.430m USDC.e 进入 <span class="mono">0x7d4e…f2dc</span>，随后铸造 VVS USDT/USDC LP；到停链块该地址持有池份额约 75.0079%。</li>
+          <li><time>22:32:47 CST · 区块 90,907,150</time><br><span class="label onchain">【链上可验证】</span>Cronos 停在本报告的物质区块；区块时间比官方停链公告早约 5 分 57 秒。</li>
+          <li><time>22:38:44–22:40:41 CST</time><br><span class="label official">【官方确认】</span>Cronos 宣布发现 Tectonic exploit 并停链；Tectonic 要求用户不要与协议交互。</li>
+          <li><time>23:06–23:16 CST</time><br><span class="label media">【媒体报道】</span><a href="https://x.com/hklst4r/status/2094079327176466563">Weilin Li</a> 将机制归类为与 Mango Markets 类似的 TONIC 价格推高后借款，并估计约 $66m–$75m 资产位于相关地址。<a href="https://x.com/kris/status/2094081766109982764">Crypto.com CEO</a> 表示 App/交易所未受影响。</li>
+          <li><time>2026-08-31 08:15 CST</time><br><span class="label media">【媒体报道】</span><a href="https://x.com/PeckShieldAlert/status/2094217367434015065">PeckShield</a> 报告约 $74m 的资产分布：Cronos 约 $60m + $8m，Ethereum 约 $6m。</li>
+        </ol>
+        <div class="note danger"><b>根因边界：</b><span class="label official">【官方确认】</span>官方只确认 exploit 与调查，未发布根因。<span class="label infer">【机制推断】</span>链上 TONIC 借入→tTONIC 抵押→多资产借出的结构，与薄流动性价格操纵路径一致，但不取代官方事后分析。</div>
+      </section>
+
+      <section class="section" id="s7"><div class="kicker">07 / Operations</div><h2>当前协议与兑付状态</h2>
+        <div class="grid"><div class="card red"><small>Cronos 出块</small><b>停滞</b></div><div class="card"><small>Mint / Borrow</small><b>不可执行</b></div><div class="card"><small>Repay / Redeem</small><b>不可执行</b></div><div class="card amber"><small>恢复时间表</small><b>未披露</b></div></div>
+        <p><span class="label onchain">【链上可验证】</span>主池 TectonicCore 在停链块的 <code>transferGuardianPaused=false</code>、<code>seizeGuardianPaused=false</code>；攻击仓位所用市场 <code>borrowGuardianPaused=false</code> 且 <code>mintGuardianPaused=false</code>。这表示合约存储的暂停开关状态，不表示经济上已恢复安全。</p>
+        <p><span class="label official">【官方确认】</span>Tectonic 未公布 mint/redeem/withdraw 的恢复日程、队列、限额或补偿流程。转账可能性、tToken 账面价值和底层可执行赎回是三个不同概念。</p>
+      </section>
+
+      <section class="section" id="s8"><div class="kicker">08 / Contagion</div><h2>完整影响范围</h2>
+        <div class="table-wrap"><table><thead><tr><th>层级 / 项目</th><th>关系</th><th>当前结论</th><th>证据</th></tr></thead><tbody>
+          <tr><td><a href="https://tectonic.finance/">Tectonic 主池</a></td><td><span class="chip">直接损失层</span></td><td>多市场资产被攻击仓位借出，市场现金严重下降。</td><td><span class="label onchain">【链上可验证】</span></td></tr>
+          <tr><td>Tectonic 供应者 / tToken 持有者</td><td><span class="chip">供应者索取权</span></td><td>损失属于同一底层市场，不应将 tToken 与其底层再次叠加计算。</td><td><span class="label infer">【机制推断】</span></td></tr>
+          <tr><td><a href="https://vvs.finance/">VVS Finance</a></td><td><span class="chip">流动性 / 交易路径</span></td><td>攻击相关资产被存入 USDT/USDC LP；未发现 VVS 自身为直接亏损方的证据。</td><td><span class="label onchain">【链上可验证】</span></td></tr>
+          <tr><td><a href="https://cronos.org/">Cronos 全链 dApp</a></td><td><span class="chip">运营传导</span></td><td>停链导致可用性中断；不等于每个 dApp 都有资产损失。</td><td><span class="label official">【官方确认】</span></td></tr>
+          <tr><td><a href="https://crypto.com/">Crypto.com App / Exchange</a></td><td><span class="chip">生态关联</span></td><td>CEO 称未受影响且正常运营；该声明不包括 Tectonic 用户资产。</td><td><span class="label official">【官方确认】</span></td></tr>
+          <tr><td>Ethereum</td><td><span class="chip">跨链去向</span></td><td><span class="mono">0xc404…72dd</span> 持有 2,592.215 ETH；未见该地址的 USDC/USDT/WETH/DAI/WBTC 余额。</td><td><span class="label onchain">【链上可验证】</span></td></tr>
+          <tr><td>其他 vault / aggregator / PT-SY-YT</td><td><span class="chip">可能嵌套</span></td><td>截止时点未能用官方 API + 直接合约双重验证具体头寸；不作“无敞口”结论。</td><td><span class="label infer">【机制推断】</span></td></tr>
+        </tbody></table></div>
+      </section>
+
+      <section class="section" id="s9"><div class="kicker">09 / Live Exposure</div><h2>实时协议敞口表</h2>
+        <p class="subtle">数据：Cronos 区块 90,907,150；价格：Tectonic oracle <span class="mono">0xD360…754A</span>；市场现金是停链块合约 <code>getCash()</code>，不是美元 TVL。“攻击仓位借款”与“市场总借款”不应相加。</p>
+        <div class="table-wrap"><table><thead><tr><th>市场</th><th>停链现金</th><th>市场总借款</th><th>攻击仓位借款</th><th>Oracle USD</th><th>攻击仓位 USD</th><th>暂停</th></tr></thead><tbody>
+          <tr><td><a href="https://cronoscan.com/address/0xB3bbf1bE947b245Aef26e3B6a9D777d7703F4c8e">tUSDC</a></td><td class="num">0.032649</td><td class="num">95,952,053.72</td><td class="num">56,059,477.60</td><td class="num">0.99996777</td><td class="num">$56.06m</td><td>借/铸 否</td></tr>
+          <tr><td><a href="https://cronoscan.com/address/0xA683fdfD9286eeDfeA81CF6dA14703DA683c44E5">tUSDT</a></td><td class="num">966,882.66</td><td class="num">85,331,700.15</td><td class="num">44,788,674.94</td><td class="num">0.99991689</td><td class="num">$44.78m</td><td>借/铸 否</td></tr>
+          <tr><td>tWBTC</td><td class="num">4.44837934</td><td class="num">93.78690212</td><td class="num">93.44398790</td><td class="num">78,890.91</td><td class="num">$7.37m</td><td>借/铸 否</td></tr>
+          <tr><td>tWETH</td><td class="num">34.278422</td><td class="num">1,849.404791</td><td class="num">1,835.367893</td><td class="num">2,478.17</td><td class="num">$4.55m</td><td>借/铸 否</td></tr>
+          <tr><td>tCRO</td><td class="num">1,977,118.96</td><td class="num">66,939,408.06</td><td class="num">37,455,577.36</td><td class="num">0.059146</td><td class="num">$2.22m</td><td>借/铸 否</td></tr>
+          <tr><td>tCDCBTC</td><td class="num">0.12770223</td><td class="num">33.75577452</td><td class="num">32.83457241</td><td class="num">78,890.36</td><td class="num">$2.59m</td><td>借/铸 否</td></tr>
+          <tr><td>tLCRO</td><td class="num">3,147,757.71</td><td class="num">25,471,911.24</td><td class="num">25,356,298.04</td><td class="num">0.07722319</td><td class="num">$1.96m</td><td>借/铸 否</td></tr>
+          <tr><td>tCDCETH</td><td class="num">0.646390</td><td class="num">367.420973</td><td class="num">356.480568</td><td class="num">2,662.55</td><td class="num">$0.95m</td><td>借/铸 否</td></tr>
+          <tr><td>tXRP</td><td class="num">8,213.529</td><td class="num">298,158.979</td><td class="num">264,707.228</td><td class="num">1.40827111</td><td class="num">$0.37m</td><td>借/铸 否</td></tr>
+          <tr><td><b>tTONIC 抵押</b></td><td class="num">9.400tn TONIC</td><td class="num">378.615tn</td><td class="num">供应 326.414tn</td><td class="num">0.000000030067</td><td class="num">账面 $9.81m<br>20% 抵押后 $1.96m</td><td>借/铸 否</td></tr>
+        </tbody></table></div>
+        <div class="note danger"><span class="label onchain">【链上可验证】</span>TectonicCore <code>getAccountLiquidity(0x2dc6…b618)</code> 返回短缺 <b>$118,885,704.761478</b>（精度 1e18）。这是停链块的账户风险引擎结果，不是已结算最终 bad debt。</div>
+      </section>
+
+      <section class="section" id="s10"><div class="kicker">10 / Exit Capacity</div><h2>价格、流动性与清算</h2>
+        <div class="two"><div><h3>TONIC/WCRO 池状态</h3><p><span class="label onchain">【链上可验证】</span><a href="https://cronoscan.com/address/0x4B377121d968Bf7a62D51B96523d59506e7c2BF0">VVS V2 TONIC/WCRO 池</a>在停链块持有 2,239,078.60 WCRO 与 4.846tn TONIC；按 CRO oracle 价计，池 TVL 约 <b>$264,865</b>，边际 TONIC 价约 <b>$2.733e-8</b>。</p><p class="subtle">该池数量远小于 326.414tn TONIC 攻击抵押仓位，因此小额 spot 价不代表该仓位的可执行退出价值。</p></div><div><h3>理论卖出报价</h3><div class="table-wrap"><table style="min-width:0"><thead><tr><th>按 spot 名义</th><th>输出 USD</th><th>折损</th></tr></thead><tbody><tr><td>$1,000</td><td class="num">$989.55</td><td class="num">1.04%</td></tr><tr><td>$10,000</td><td class="num">$9,271.97</td><td class="num">7.28%</td></tr><tr><td>$50,000</td><td class="num">$36,217.19</td><td class="num">27.57%</td></tr><tr><td>$100,000</td><td class="num">$56,879.25</td><td class="num">43.12%</td></tr></tbody></table></div></div></div>
+        <p class="subtle">计算使用常数乘积 AMM 与 <a href="https://medium.com/vvs-finance/vvs-finance-very-very-simple-defi-for-everyone-8c864be68b6a">VVS V2 0.3% 输入费假设</a>；不含 gas、抢跑、路由与其他池。<b>当前链已停，所有报价不可执行。</b></p>
+        <h3>攻击相关资产去向（去重后）</h3>
+        <div class="table-wrap"><table><thead><tr><th>位置</th><th>资产</th><th>原始数量</th><th>估值</th><th>重叠处理</th></tr></thead><tbody>
+          <tr><td><span class="mono">Cronos 0x7d4e…f2dc</span></td><td>75.0079% VVS USDT/USDC LP</td><td>30.397m USDT + 29.719m USDC.e 底层份额</td><td class="num">$60.116m</td><td>LP 只拆解一次，不再加 LP 面值</td></tr>
+          <tr><td><span class="mono">Cronos 0x215a…d3fc</span></td><td>USDC.e / USDT / WCRO / CRO</td><td>7.770m USDC.e + 370.82 USDT + 13,160.20 WCRO + 3,999.93 CRO</td><td class="num">$7.771m</td><td>独立原生/代币余额</td></tr>
+          <tr><td><span class="mono">Cronos 0x7d4e…f2dc</span></td><td>CRO</td><td>5,367.92 CRO</td><td class="num">$318</td><td>独立原生余额</td></tr>
+          <tr><td><a href="https://etherscan.io/address/0xc404160b79bd8905061a1caecbeca2eeab3f72dd"><span class="mono">Ethereum 0xc404…72dd</span></a></td><td>ETH</td><td>2,592.21518754 ETH</td><td class="num">$6.424m</td><td>用停链 WETH oracle 作一致估值</td></tr>
+        </tbody></table></div>
+      </section>
+
+      <section class="section" id="s11"><div class="kicker">11 / Scenarios</div><h2>敞口与恢复情景</h2>
+        <p><b>分母：</b>$118.8857m 攻击账户链上短缺。<b>回收池：</b>$74.3118m 已识别攻击相关资产。只计算 LP 的底层稳定币份额，不与 LP token 重复叠加。</p>
+        <div class="table-wrap"><table><thead><tr><th>已识别资产回收率</th><th>机械模型残余短缺</th><th>占初始短缺</th><th>含义</th></tr></thead><tbody>
+          <tr><td>0%</td><td class="num">$118.89m</td><td class="num">100.00%</td><td>未回收任何已识别资产</td></tr><tr><td>25%</td><td class="num">$100.31m</td><td class="num">84.37%</td><td>仅少量资产返回/冻结</td></tr><tr><td>50%</td><td class="num">$81.73m</td><td class="num">68.75%</td><td>一半已识别资产可用于弥补</td></tr><tr><td>75%</td><td class="num">$63.15m</td><td class="num">53.12%</td><td>高回收但非全部</td></tr><tr><td>100%</td><td class="num">$44.57m</td><td class="num">37.49%</td><td>已识别资产全部返回，仍有差额</td></tr>
+        </tbody></table></div>
+        <div class="note"><span class="label infer">【机制推断】</span>情景仅是短缺减已回收资产的机械计算。它排除保险、团队注资、其他借款人还款、攻击抵押品实际清算折价、价格变化、律师/法律费用、补偿政策和未识别地址；不是最终贷款人损失。</div>
+      </section>
+
+      <section class="section" id="s12"><div class="kicker">12 / Analogues</div><h2>历史案例</h2>
+        <div class="table-wrap"><table><thead><tr><th>案例</th><th>证据</th><th>与本案的相似/差异</th><th>结果与教训</th></tr></thead><tbody>
+          <tr><td><a href="https://www.justice.gov/usao-sdny/pr/man-convicted-110-million-cryptocurrency-scheme">Mango Markets 2022</a></td><td><span class="label official">【官方确认】</span></td><td>最近的机制类比：薄流动性资产价格被人为推高，并放大协议内可借价值；Mango 的具体产品和链不同。</td><td>美国司法部称涉案约 $110m 并获判有罪；法律追偿周期不与停链回收同步。</td></tr>
+          <tr><td><a href="https://forum.euler.finance/t/special-announcement/900">Euler 2023</a></td><td><span class="label official">【官方确认】</span></td><td>乐观恢复路径：受监控资产、调查、谈判与法执压力可实现高回收；但 Euler 是代码漏洞，不是价格操纵。</td><td>Euler Foundation 称所有可回收资金在三周后返回。不能将该回收率外推给 Tectonic。</td></tr>
+          <tr><td><a href="https://forum.moonwell.fi/t/post-mortem-mamo-market-incident-on-base/2208">Moonwell MAMO 2026</a></td><td><span class="label official">【官方确认】</span></td><td>反例性细化：MAMO 事件同时利用抵押品会计交换率与 oracle 价格；Tectonic 当前链上路径显示大量借 TONIC 后转为 tTONIC 抵押，细节并不完全相同。</td><td>单一“oracle manipulation”标签容易掩盖会计、供应上限和抵押因子之间的组合风险。</td></tr>
+        </tbody></table></div>
+      </section>
+
+      <section class="section" id="s13"><div class="kicker">13 / Sentiment</div><h2>社区情绪</h2>
+        <p><span class="label media">【媒体报道】</span>当前可见讨论主要围绕三个问题：约 $74m 与 $119m+ 统计差异；停链的资产保全效果；网络重启是否会包含地址限制、回滚或特殊状态处理。这些是合理问题，不是已知答案。</p>
+        <p><span class="label rumor">【社区传言】</span>“必然回滚”、“攻击资金全部冻结”、“用户会全额赔付”、“最终损失就是 $75m”都没有官方证据，不进入恢复率计算。可见帖子和回复只是小样本，不代表群体民调。</p>
+      </section>
+
+      <section class="section" id="s14"><div class="kicker">14 / Independent View</div><h2>独立思考</h2>
+        <div class="two"><div><div class="callout-number">$74m ≠ $118.9m</div><p><b>最重要的矛盾</b>不是哪个数字“对”，而是它们回答了不同问题：前者是跟踪到攻击相关地址的资产估值；后者是 Tectonic 风险引擎在停链块对攻击账户的短缺。</p></div><div><h3>哪个可见指标最误导？</h3><p>TVL、tToken 交换率、稳定币池帐面余额，甚至于将来可能出现的 <code>badDebt=0</code>，都不能独立证明供应者已可足额赎回。最关键的是可回收借款与实际可执行现金。</p></div></div>
+        <h3>隔离与损失的区别</h3><p><span class="label infer">【机制推断】</span>停链把攻击相关资产的一部分留在 Cronos，可能提高谈判、冻结或特殊恢复操作的成功率；但停链没有改变 Tectonic 账本中的攻击借款，也没有自动恢复各市场现金。</p>
+        <h3>什么信息会改变基准判断？</h3><ul><li>Tectonic 官方事后分析：根因、合约受影响范围和最终借款账本。</li><li>Cronos 重启方案：是否更改状态、限制地址、回滚或仅恢复出块。</li><li>攻击相关 LP 和 ETH 是否被返回、冻结、缴获或转移。</li><li>供应者损失承担：储备、保险、团队资本、协议代币或无担保损失分配。</li></ul>
+      </section>
+
+      <section class="section" id="s15"><div class="kicker">15 / Actions</div><h2>风险行动、开放问题与监控清单</h2>
+        <div class="two"><div><h3>按角色的风险行动</h3><ul><li><b>Tectonic 供应者：</b>遵循官方“不要交互”指引；保存钱包、tToken 余额与停链块证据；不用前端账面 APY/余额当作可赎回性。</li><li><b>Cronos 协议管理者：</b>在重启前将 TONIC/tToken 作为非流动、可损伤资产处理；审查本地 oracle 、抵押因子和供应/借款上限。</li><li><b>交易所/桥/安全团队：</b>监控报告列出的三个 Cronos/Ethereum 地址，但任何冻结或返回操作需要合法授权。</li></ul></div><div><h3>仅官方/法律程序能回答</h3><ul><li>官方根因与完整攻击交易集是什么？</li><li>“攻击损失”分母是总借款、净转出、已实现 bad debt 还是供应者最终损失？</li><li>重启是否会带来合约暂停、oracle 替换、市场下架或状态修改？</li><li>资产返回、团队资本与用户赔付的先后次序是什么？</li></ul></div></div>
+        <h3>监控清单</h3><div class="table-wrap"><table><thead><tr><th>层级</th><th>触发条件</th><th>决策意义</th></tr></thead><tbody><tr><td>官方</td><td>Tectonic 事后分析、损失数、恢复/赔付方案</td><td>取代当前媒体估值</td></tr><tr><td>链上</td><td>Cronos 新块；市场暂停标志；oracle 、collateral factor 变更</td><td>判断是否恢复交互与新的清算路径</td></tr><tr><td>资金</td><td>VVS LP 转移/拆出；<span class="mono">0x215a…</span> 转账；2,592.215 ETH 移动</td><td>修正可回收资产分子</td></tr><tr><td>流动性</td><td>TONIC/WCRO 池重启后深度、价格与大额报价</td><td>不再用小额边际价估值大仓位</td></tr><tr><td>法律</td><td>冻结、谈判、寻回、起诉或治理决议</td><td>把“可跟踪”升级为“已控制/已回收”</td></tr></tbody></table></div>
+        <p class="subtle">以上是风险管理动作，不构成个人化投资、法律或税务建议。</p>
+      </section>
+
+      <section class="section" id="s16"><div class="kicker">16 / Caveats & Sources</div><h2>Caveats 与来源</h2>
+        <ul><li>官方 RPC 返回 503，PublicNode 和 dRPC 都返回区块 90,907,150；因此当前链状态以“已验证端点未见新块”表述，不扩展为对每个验证者的监测结论。</li><li>各市场数据在同一停链块读取；<code>accrualBlockNumber</code> 在不活跃市场可早于停链块，本报告没有通过写交易强制利息累计。</li><li>ETH 跨链地址估值使用停链块 Tectonic WETH oracle，为了与攻击账户分母保持一致；不是当前可执行售价。</li><li>未发布官方根因、最终损失、保险/赔付或法律回收数；所有情景均保留不确定性。</li><li>所有包装、LP 与底层只计一次；不把 VVS LP token 、池内 USDT/USDC 和攻击者 LP 份额叠加。</li></ul>
+        <h3>直接来源清单</h3>
+        <ol class="source-list">
+          <li><a href="https://x.com/TectonicFi/status/2094072821630799989">Tectonic 官方事故公告</a></li><li><a href="https://x.com/CronosNetwork/status/2094072333434769703">Cronos 官方停链公告</a></li><li><a href="https://x.com/kris/status/2094081766109982764">Crypto.com CEO 影响范围声明</a></li><li><a href="https://tectonic.gitbook.io/docs/developer/smart-contracts-and-security">Tectonic 官方合约地址</a></li><li><a href="https://tectonic.gitbook.io/docs/developer/smart-contracts-and-security/ttoken-smart-contracts">Tectonic tToken 合约列表</a></li><li><a href="https://tectonic.gitbook.io/docs/introduction/faqs">Tectonic FAQ / oracle 说明</a></li><li><a href="https://cronoscan.com/block/90907150">Cronos 区块 90,907,150</a></li><li><a href="https://cronoscan.com/tx/0x0fce5ae8d2eeb82c838e750d0e25af1564a2c7d05bf843dd1cfea102ce587d06">TONIC 借入/铸造关键交易</a></li><li><a href="https://cronoscan.com/address/0x2dc6A36F4e5eeEFE112C01569de96dEa496Bb618">攻击抵押/借款账户</a></li><li><a href="https://cronoscan.com/address/0x4B377121d968Bf7a62D51B96523d59506e7c2BF0">VVS TONIC/WCRO 池</a></li><li><a href="https://cronoscan.com/address/0x39cC0E14795A8e6e9D02A21091b81FE0d61D82f9">VVS USDT/USDC 池</a></li><li><a href="https://etherscan.io/address/0xc404160b79bd8905061a1caecbeca2eeab3f72dd">Ethereum 去向地址</a></li><li><a href="https://x.com/hklst4r/status/2094079327176466563">Weilin Li 链上分析</a></li><li><a href="https://x.com/PeckShieldAlert/status/2094217367434015065">PeckShield 资金分布估值</a></li><li><a href="https://www.theblock.co/news/defi/2026-08-30-crypto-com-linked-cronos-network-halts-after-tectonic-exploit-estimated-at-75-million-413069">The Block 事件报道</a></li><li><a href="https://coinpedia.org/news/cronos-blockchain-pauses-after-tectonic-lending-exploit-119-5m-at-risk/">Coinpedia 存档节点估值</a></li><li><a href="https://forum.moonwell.fi/t/post-mortem-mamo-market-incident-on-base/2208">Moonwell MAMO 官方事后分析</a></li><li><a href="https://www.justice.gov/usao-sdny/pr/man-convicted-110-million-cryptocurrency-scheme">US DOJ: Mango Markets</a></li><li><a href="https://forum.euler.finance/t/special-announcement/900">Euler Foundation 恢复公告</a></li>
+        </ol>
+      </section>
+    </main>
+  </div>
+  <div class="wrap footer"><a href="../../">链上事故风险报告档案</a> · Tectonic Event Risk Report · v1 · 仅供风险研究，不构成个人化投资或法律建议。</div>
+</body>
+</html>

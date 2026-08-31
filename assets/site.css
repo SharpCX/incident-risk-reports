@@ -1,0 +1,80 @@
+:root {
+  --ink: #152235;
+  --muted: #66758a;
+  --line: #dce3ea;
+  --paper: #ffffff;
+  --wash: #f3f6f8;
+  --navy: #102a46;
+  --blue: #1671a8;
+  --red: #b93d3d;
+  --amber: #9a6105;
+  --shadow: 0 22px 65px rgba(14, 34, 55, 0.1);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  overflow-x: hidden;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 90% 0, rgba(50, 137, 187, 0.12), transparent 26rem),
+    linear-gradient(180deg, #eef3f6 0, #f8fafb 34rem, #f4f6f8 100%);
+  font: 15px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+}
+
+a { color: inherit; }
+.wrap { width: min(1120px, calc(100% - 40px)); margin: auto; }
+.site-nav { display: flex; align-items: center; justify-content: space-between; padding: 24px 0; }
+.brand { display: flex; align-items: center; gap: 11px; text-decoration: none; font-weight: 760; }
+.mark { width: 31px; height: 31px; border: 1px solid rgba(255,255,255,.3); border-radius: 9px; display: grid; place-items: center; background: rgba(255,255,255,.08); }
+.nav-note { color: #b8cce0; font-size: 13px; }
+
+.hero { color: #fff; background: linear-gradient(135deg, #0d243c 0%, #183e63 70%, #1c5479 100%); }
+.hero-inner { padding: 74px 0 90px; }
+.eyebrow { color: #8fd0f3; font-size: 12px; font-weight: 780; letter-spacing: .16em; text-transform: uppercase; }
+h1 { margin: 15px 0 22px; max-width: 880px; font: 700 clamp(40px, 6vw, 72px)/1.06 Georgia, "Songti SC", serif; letter-spacing: -.02em; }
+.hero-copy { max-width: 770px; color: #d7e6f2; font-size: 18px; }
+.principles { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 28px; }
+.principles span { padding: 7px 11px; border: 1px solid rgba(255,255,255,.22); border-radius: 999px; color: #dcebf6; font-size: 12px; background: rgba(255,255,255,.05); }
+
+main { padding: 52px 0 88px; }
+.section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 20px; }
+.section-head h2 { margin: 0; color: var(--navy); font: 700 30px/1.2 Georgia, "Songti SC", serif; }
+.section-head p { margin: 0; color: var(--muted); }
+.report-list { display: grid; gap: 18px; }
+.report-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 26px; overflow: hidden; padding: 28px; border: 1px solid var(--line); border-radius: 20px; background: rgba(255,255,255,.94); box-shadow: var(--shadow); text-decoration: none; transition: transform .18s ease, border-color .18s ease; }
+.report-card:hover { transform: translateY(-3px); border-color: #a8c5d8; }
+.report-meta { display: flex; gap: 9px; align-items: center; flex-wrap: wrap; color: var(--muted); font-size: 12px; }
+.pill { padding: 3px 8px; border-radius: 999px; background: #eef3f7; border: 1px solid var(--line); }
+.pill.critical { color: #9f3030; background: #fff0f0; border-color: #efcccc; }
+.report-card h3 { margin: 12px 0 9px; color: #163a5a; font: 700 26px/1.25 Georgia, "Songti SC", serif; }
+.summary { max-width: 750px; margin: 0; color: #506176; }
+.metrics { display: grid; grid-template-columns: repeat(2, minmax(112px, 1fr)); gap: 10px; align-self: stretch; }
+.metric { min-width: 125px; padding: 15px; border: 1px solid var(--line); border-radius: 13px; background: var(--wash); }
+.metric small { display: block; color: var(--muted); margin-bottom: 6px; }
+.metric b { color: var(--navy); font: 700 24px/1 Georgia, serif; }
+.empty { padding: 32px; color: var(--muted); border: 1px dashed #bac6d1; border-radius: 16px; text-align: center; }
+.method { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 56px; }
+.method article { padding: 22px; border-top: 3px solid #2e82b2; background: rgba(255,255,255,.7); }
+.method h3 { margin: 0 0 7px; font-size: 15px; }
+.method p { margin: 0; color: var(--muted); font-size: 13px; }
+footer { padding: 26px 0 42px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+
+@media (max-width: 760px) {
+  .nav-note { display: none; }
+  .hero-inner { padding: 48px 0 62px; }
+  .report-card { grid-template-columns: 1fr; padding: 22px; }
+  .metrics { order: -1; }
+  .method { grid-template-columns: 1fr; }
+  .section-head { display: block; }
+  .section-head p { margin-top: 6px; }
+}
+
+@media (max-width: 480px) {
+  .wrap { width: min(100% - 28px, 1120px); }
+  h1 { font-size: 39px; }
+  .hero-copy { font-size: 16px; }
+  .report-card { padding: 18px; }
+  .metrics { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>链上事故风险报告</title>
+  <meta name="description" content="面向 DeFi、稳定币与链上协议事故的证据分层风险报告。">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="链上事故风险报告">
+  <meta property="og:description" content="官方事实、链上证据、机制推断和未知项分开呈现。">
+  <meta property="og:url" content="https://sharpcx.github.io/incident-risk-reports/">
+  <meta property="og:image" content="https://sharpcx.github.io/incident-risk-reports/assets/site-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://sharpcx.github.io/incident-risk-reports/">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <header class="hero">
+    <nav class="wrap site-nav">
+      <a class="brand" href="./"><span class="mark">◈</span><span>Incident Risk Reports</span></a>
+      <span class="nav-note">Independent, evidence-tiered research</span>
+    </nav>
+    <div class="wrap hero-inner">
+      <div class="eyebrow">On-chain incidents · solvency · recovery</div>
+      <h1>链上事故风险报告</h1>
+      <p class="hero-copy">把官方事实、链上证据、媒体报道、机制推断和仍未知的部分分开。每份报告绑定数据截止时间与区块高度，避免把可追踪资产、协议短缺和最终损失混成一个数字。</p>
+      <div class="principles"><span>证据分层</span><span>固定数据截止</span><span>资产去重</span><span>恢复情景</span><span>持续更新</span></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="section-head">
+      <h2>报告档案</h2>
+      <p id="report-count">正在载入报告…</p>
+    </div>
+    <div class="report-list" id="report-list" aria-live="polite"></div>
+    <noscript><p class="empty">请启用 JavaScript 查看报告索引，或直接打开 <a href="reports/tectonic-2026-08-30/">Tectonic 事故风险报告</a>。</p></noscript>
+
+    <section class="method" aria-label="研究方法">
+      <article><h3>01 · 先定分母</h3><p>分别衡量协议负债、账户短缺、已识别资产和最终可回收资金。</p></article>
+      <article><h3>02 · 再分证据</h3><p>官方、链上、媒体与推断使用不同标签，避免不确定信息伪装成事实。</p></article>
+      <article><h3>03 · 保留未知</h3><p>根因、重启、追偿和补偿未披露时，明确写成开放问题。</p></article>
+    </section>
+  </main>
+
+  <footer><div class="wrap">独立风险研究，仅供信息参考，不构成投资、法律或税务建议。</div></footer>
+
+  <script>
+    const list = document.querySelector('#report-list');
+    const count = document.querySelector('#report-count');
+
+    fetch('reports.json')
+      .then(response => {
+        if (!response.ok) throw new Error('报告清单读取失败');
+        return response.json();
+      })
+      .then(reports => {
+        reports.sort((a, b) => b.date.localeCompare(a.date));
+        count.textContent = `${reports.length} 份公开报告`;
+        list.innerHTML = reports.map(report => `
+          <a class="report-card" href="${report.url}">
+            <div>
+              <div class="report-meta">
+                <span class="pill ${report.severity}">${report.status}</span>
+                <span>${report.chain}</span><span>·</span><span>${report.date}</span><span>·</span><span>${report.version}</span>
+              </div>
+              <h3>${report.title}</h3>
+              <p class="summary">${report.summary}</p>
+            </div>
+            <div class="metrics">
+              ${report.metrics.map(metric => `<div class="metric"><small>${metric.label}</small><b>${metric.value}</b></div>`).join('')}
+            </div>
+          </a>`).join('');
+      })
+      .catch(error => {
+        count.textContent = '报告索引暂不可用';
+        list.innerHTML = `<p class="empty">${error.message}。<a href="reports/tectonic-2026-08-30/">直接打开最新报告</a></p>`;
+      });
+  </script>
+</body>
+</html>
+

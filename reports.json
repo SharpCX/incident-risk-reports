@@ -1,0 +1,21 @@
+[
+  {
+    "slug": "tectonic-2026-08-30",
+    "project": "Tectonic",
+    "title": "Tectonic 事故风险报告",
+    "date": "2026-08-31",
+    "eventDate": "2026-08-30",
+    "version": "v1",
+    "status": "调查中",
+    "severity": "critical",
+    "chain": "Cronos",
+    "category": "Oracle Manipulation / Protocol Solvency",
+    "summary": "停链块显示攻击仓位总借款约 1.2085 亿美元、账户短缺约 1.1889 亿美元；约 7,431 万美元攻击相关资产可跟踪，但并非最终损失。",
+    "metrics": [
+      { "label": "链上短缺", "value": "$118.89m" },
+      { "label": "可跟踪资产", "value": "$74.31m" }
+    ],
+    "url": "reports/tectonic-2026-08-30/"
+  }
+]
+
