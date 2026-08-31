@@ -1,5 +1,23 @@
 [
   {
+    "slug": "neutrl-lulo-2026-08-13",
+    "project": "Neutrl / Lulo",
+    "title": "Neutrl 事件影响与 Lulo 风险暴露报告",
+    "date": "2026-08-31",
+    "eventDate": "2026-08-13",
+    "version": "v2",
+    "status": "早期兑付筹备中",
+    "severity": "critical",
+    "chain": "Ethereum",
+    "category": "Reserve Liquidity / Redemption Pause",
+    "summary": "官方称约有 2,700 万美元可用流动资产并计划早期兑付，但这不是确定兑付率；Lulo 剩余 Vault 约 167.2 万美元，几乎全部位于零流动性的 sNUSD/USDC 市场。",
+    "metrics": [
+      { "label": "可用流动资产", "value": "~$27m" },
+      { "label": "Lulo 剩余 Vault", "value": "$1.672m" }
+    ],
+    "url": "reports/neutrl-lulo-2026-08-13/"
+  },
+  {
     "slug": "tectonic-2026-08-30",
     "project": "Tectonic",
     "title": "Tectonic 事故风险报告",
