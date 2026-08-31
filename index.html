@@ -51,7 +51,9 @@
     const list = document.querySelector('#report-list');
     const count = document.querySelector('#report-count');
 
-    fetch('reports.json')
+    // GitHub Pages caches static JSON for up to ten minutes. A unique query
+    // keeps newly published reports visible without requiring a hard refresh.
+    fetch(`reports.json?v=${Date.now()}`, { cache: 'no-store' })
       .then(response => {
         if (!response.ok) throw new Error('报告清单读取失败');
         return response.json();
