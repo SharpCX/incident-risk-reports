@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#075c59"/>
+      <stop offset="0.68" stop-color="#0d4442"/>
+      <stop offset="1" stop-color="#172f32"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1090" cy="-10" r="260" fill="none" stroke="#8ddbd4" stroke-opacity=".22" stroke-width="2"/>
+  <circle cx="1090" cy="-10" r="330" fill="none" stroke="#8ddbd4" stroke-opacity=".10" stroke-width="50"/>
+  <text x="76" y="88" fill="#8ddbd4" font-size="21" font-family="Arial, sans-serif" font-weight="700" letter-spacing="4">INCIDENT RISK REPORT · ETHEREUM</text>
+  <text x="76" y="170" fill="#ffffff" font-size="56" font-family="Georgia, serif" font-weight="700">Neutrl Incident Impact &amp;</text>
+  <text x="76" y="238" fill="#ffffff" font-size="56" font-family="Georgia, serif" font-weight="700">Lulo Risk Exposure Report</text>
+  <line x1="76" y1="294" x2="1124" y2="294" stroke="#8ddbd4" stroke-opacity=".3"/>
+  <text x="76" y="352" fill="#cfeae7" font-size="22" font-family="Arial, sans-serif">Strategy position · reserve liquidity · pause · early redemption</text>
+  <text x="76" y="457" fill="#ffffff" font-size="50" font-family="Georgia, serif" font-weight="700">~$27M</text>
+  <text x="76" y="491" fill="#b8d8d4" font-size="18" font-family="Arial, sans-serif">Available liquid assets · not a recovery rate</text>
+  <text x="585" y="457" fill="#ffffff" font-size="50" font-family="Georgia, serif" font-weight="700">$1.672M</text>
+  <text x="585" y="491" fill="#b8d8d4" font-size="18" font-family="Arial, sans-serif">Lulo remaining vault · almost entirely sNUSD</text>
+  <text x="76" y="568" fill="#86aaa6" font-size="18" font-family="Arial, sans-serif">Evidence cutoff · 2026-08-31 · v2</text>
+</svg>

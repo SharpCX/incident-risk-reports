@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>On-chain Incident Risk Reports</title>
+  <meta name="description" content="Evidence-tiered risk reports on DeFi, stablecoin and on-chain protocol incidents.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="On-chain Incident Risk Reports">
+  <meta property="og:description" content="Official facts, on-chain evidence, inference and unresolved questions—kept separate.">
+  <meta property="og:url" content="https://sharpcx.github.io/incident-risk-reports/en/">
+  <meta property="og:image" content="https://sharpcx.github.io/incident-risk-reports/assets/site-cover-en.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://sharpcx.github.io/incident-risk-reports/en/">
+  <link rel="alternate" hreflang="zh-CN" href="https://sharpcx.github.io/incident-risk-reports/">
+  <link rel="alternate" hreflang="en" href="https://sharpcx.github.io/incident-risk-reports/en/">
+  <link rel="alternate" hreflang="x-default" href="https://sharpcx.github.io/incident-risk-reports/">
+  <link rel="icon" href="../assets/site-icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+  <header class="hero">
+    <nav class="wrap site-nav">
+      <a class="brand" href="./"><span class="mark">◈</span><span>Incident Risk Reports</span></a>
+      <span class="nav-note"><a href="../" style="color:inherit">中文</a> · Independent, evidence-tiered research</span>
+    </nav>
+    <div class="wrap hero-inner">
+      <div class="eyebrow">On-chain incidents · solvency · recovery</div>
+      <h1>On-chain Incident Risk Reports</h1>
+      <p class="hero-copy">Official disclosures, reproducible on-chain evidence, media reporting, mechanism-based inference and unresolved questions are presented separately. Every report carries an explicit evidence cutoff and block anchor.</p>
+      <div class="principles"><span>Evidence tiers</span><span>Fixed cutoff</span><span>Exposure deduplication</span><span>Recovery scenarios</span><span>Living updates</span></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="section-head">
+      <h2>Report archive</h2>
+      <p id="report-count">Loading reports…</p>
+    </div>
+    <div class="report-list" id="report-list" aria-live="polite"></div>
+
+    <section class="method" aria-label="Research method">
+      <article><h3>01 · Define the denominator</h3><p>Protocol liabilities, account shortfall, traceable assets and final recoveries are measured separately.</p></article>
+      <article><h3>02 · Tier the evidence</h3><p>Official statements, on-chain facts, reporting and inference use distinct labels.</p></article>
+      <article><h3>03 · Preserve uncertainty</h3><p>Root cause, restart, recovery and compensation remain open questions until disclosed.</p></article>
+    </section>
+  </main>
+
+  <footer><div class="wrap">Independent risk research for informational purposes only. Not investment, legal or tax advice.</div></footer>
+
+  <script>
+    const list = document.querySelector('#report-list');
+    const count = document.querySelector('#report-count');
+    fetch(`../reports.json?v=${Date.now()}`, { cache: 'no-store' })
+      .then(response => {
+        if (!response.ok) throw new Error('Could not load the report archive');
+        return response.json();
+      })
+      .then(reports => {
+        reports = reports.filter(report => report.enUrl).sort((a, b) => b.date.localeCompare(a.date));
+        count.textContent = `${reports.length} report${reports.length === 1 ? '' : 's'} available in English`;
+        list.innerHTML = reports.map(report => `
+          <a class="report-card" href="../${report.enUrl}">
+            <div>
+              <div class="report-meta">
+                <span class="pill ${report.severity}">${report.statusEn || report.status}</span>
+                <span>${report.chain}</span><span>·</span><span>${report.date}</span><span>·</span><span>${report.version}</span>
+              </div>
+              <h3>${report.titleEn || report.title}</h3>
+              <p class="summary">${report.summaryEn || report.summary}</p>
+            </div>
+            <div class="metrics">
+              ${(report.metricsEn || report.metrics).map(metric => `<div class="metric"><small>${metric.label}</small><b>${metric.value}</b></div>`).join('')}
+            </div>
+          </a>`).join('');
+      })
+      .catch(error => {
+        count.textContent = 'Archive unavailable';
+        list.innerHTML = `<p class="empty">${error.message}.</p>`;
+      });
+  </script>
+</body>
+</html>

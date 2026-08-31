@@ -7,15 +7,24 @@
     "eventDate": "2026-08-13",
     "version": "v2",
     "status": "早期兑付筹备中",
+    "statusEn": "Early redemption in preparation",
     "severity": "critical",
     "chain": "Ethereum",
     "category": "Reserve Liquidity / Redemption Pause",
     "summary": "官方称约有 2,700 万美元可用流动资产并计划早期兑付，但这不是确定兑付率；Lulo 剩余 Vault 约 167.2 万美元，几乎全部位于零流动性的 sNUSD/USDC 市场。",
+    "titleEn": "Neutrl Incident Impact and Lulo Risk Exposure Report",
+    "summaryEn": "Neutrl says approximately $27 million of liquid assets are available and is preparing early redemption, but this is not a confirmed recovery rate. Lulo's remaining $1.672 million vault is almost entirely allocated to the zero-liquidity sNUSD/USDC market.",
     "metrics": [
       { "label": "可用流动资产", "value": "~$27m" },
       { "label": "Lulo 剩余 Vault", "value": "$1.672m" }
     ],
-    "url": "reports/neutrl-lulo-2026-08-13/"
+    "metricsEn": [
+      { "label": "Available liquid assets", "value": "~$27m" },
+      { "label": "Lulo remaining vault", "value": "$1.672m" }
+    ],
+    "url": "reports/neutrl-lulo-2026-08-13/",
+    "enUrl": "reports/neutrl-lulo-2026-08-13/en/",
+    "languages": ["zh-CN", "en"]
   },
   {
     "slug": "tectonic-2026-08-30",
