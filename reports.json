@@ -16,6 +16,23 @@
       { "label": "可跟踪资产", "value": "$74.31m" }
     ],
     "url": "reports/tectonic-2026-08-30/"
+  },
+  {
+    "slug": "moonwell-mamo-2026-08-27",
+    "project": "Moonwell / MAMO",
+    "title": "Moonwell MAMO 事件风险报告",
+    "date": "2026-08-27",
+    "eventDate": "2026-08-27",
+    "version": "v1",
+    "status": "调查中",
+    "severity": "critical",
+    "chain": "Base",
+    "category": "Oracle Manipulation / Lending Market Shortfall",
+    "summary": "Base 截止区块显示事件账户链上 shortfall 约 912.4 万美元；872.9 万 USDC 是跨链退出毛额，并非官方损失或攻击者净利润。",
+    "metrics": [
+      { "label": "链上 Shortfall", "value": "$9.124m" },
+      { "label": "跨链毛额", "value": "$8.729m" }
+    ],
+    "url": "reports/moonwell-mamo-2026-08-27/"
   }
 ]
-
