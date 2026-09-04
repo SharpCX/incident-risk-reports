@@ -1,5 +1,24 @@
 [
   {
+    "slug": "notional-v1-2026-09-04",
+    "project": "Notional V1",
+    "title": "Notional V1 Escrow 事故风险报告",
+    "date": "2026-09-04",
+    "eventDate": "2026-09-04",
+    "version": "v1",
+    "status": "已链上冻结，官方未披露",
+    "severity": "critical",
+    "chain": "Ethereum",
+    "category": "Integer Truncation / Legacy Escrow Drain",
+    "summary": "被攻击地址属于已弃用的 Notional V1 Escrow，并非 V2；链上提取 69,257.37 DAI 和 165.85 万 USDC，面值约 172.78 万美元，Treasury 随后将旧提款入口冻结。",
+    "metrics": [
+      { "label": "链上提取面值", "value": "$1.7278m" },
+      { "label": "进入 Tornado", "value": "689.2 ETH" }
+    ],
+    "url": "reports/notional-v1-2026-09-04/",
+    "languages": ["zh-CN"]
+  },
+  {
     "slug": "neutrl-lulo-2026-08-13",
     "project": "Neutrl / Lulo",
     "title": "Neutrl 事件影响与 Lulo 风险暴露报告",
