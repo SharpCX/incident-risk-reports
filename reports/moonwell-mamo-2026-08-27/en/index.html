@@ -85,4 +85,4 @@
 document.getElementById('topBtn').onclick=()=>scrollTo({top:0,behavior:'smooth'});
 const buttons=[...document.querySelectorAll('[data-filter]')];buttons.forEach(b=>b.onclick=()=>{buttons.forEach(x=>x.classList.remove('on'));b.classList.add('on');const f=b.dataset.filter;document.querySelectorAll('.ev').forEach(x=>x.closest('p,li')?.classList.toggle('dim',f!=='all'&&!x.classList.contains(f)))});
 const links=[...document.querySelectorAll('.side nav a')];const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}}),{rootMargin:'-20% 0px -70%'});document.querySelectorAll('section').forEach(s=>obs.observe(s));
-</script></body></html>
+</script><script src="../../../assets/donation.js"></script></body></html>
