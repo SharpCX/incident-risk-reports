@@ -27,7 +27,7 @@
       <div class="eyebrow">Mechanism Research · X Layer · Aave V3</div>
       <h1>一笔交易如何完成 3.34× 循环贷</h1>
       <p>逐层解码 <span class="mono">0x02343b…02a57</span>：Aave V3 的闪电贷债务模式如何把“存入—借出—兑换—再存入”的多轮操作，压缩成一笔原子交易。</p>
-      <div class="stamp"><span>数据截止：2026-09-12 01:42:03 CST</span><span>区块 70,379,487</span><span>Chain ID 196</span><span>版本 v1</span><span>正常产品机制，不是攻击</span></div>
+      <div class="stamp"><span>数据截止：2026-09-12 01:42:03 CST</span><span>区块 70,379,487</span><span>Chain ID 196</span><span>版本 v1.1</span><span>正常产品机制，不是攻击</span></div>
     </div>
   </header>
 
@@ -132,6 +132,13 @@
         <div class="call"><span class="dim">// 逻辑化简，非逐字源码</span><br>transferUnderlyingTo(receiver, amount);<br>receiver.<span class="hi">executeOperation</span>(...);<br><br>if (mode == 0) {<br>&nbsp;&nbsp;pullBack(amount + premium);<br>} else {<br>&nbsp;&nbsp;<span class="hi">executeBorrow</span>(onBehalfOf, amount, mode, releaseUnderlying = false);<br>&nbsp;&nbsp;premium = 0;<br>}</div>
         <p><span class="label source">【治理材料】</span><a href="https://governance.aave.com/t/direct-to-aip-add-x-layer-loop-tool-margin-trading-to-flashborrowers/25551">Aave 关于 X Layer Loop Tool 的提案</a>明确写明：工具让用户无需手动完成多次 supply、borrow 和 re-supply，并申请把指定合约加入 FlashBorrower 白名单以免除闪电贷费用。该白名单只豁免指定合约的 flashloan fee，不改变储备或风险参数。</p>
         <div class="note amber"><b>“premium 为 0”要分清原因：</b>Aave 核心逻辑对转成债务的 mode=2 分支本就不收 premium；白名单则还可免除指定合约执行普通闪电贷操作时的费用。两者不能混为一谈，更不能推广为所有 Aave 闪电贷都免费。</div>
+        <h3>四个常见问题</h3>
+        <div class="two">
+          <article class="concept"><span class="tag">Q1 · 费用口径</span><strong><code>premium = 0</code> 是否表示 Aave 没收费？</strong><p><b>仅就本笔的闪电贷环节而言，是。</b>Aave 没收一次性的 flashloan premium，最终建立的债务本金仍是 0.02335872 xETH。但这笔浮动债务会在交易完成后持续计息；DEX 池费、价格影响和 Gas 也不属于 premium。</p></article>
+          <article class="concept"><span class="tag">Q2 · 是否申请</span><strong>把 premium 设为 0，需要向 Aave 申请吗？</strong><p><b>本笔使用的 mode=2 不需要申请白名单。</b>这是债务结算分支的协议逻辑，前提是账户抵押、借款能力和健康因子检查通过。若希望普通 mode=0 闪电贷也免手续费，则需要通过治理授权，由 ACL Manager 把指定合约加入 FlashBorrower 白名单；调用者不能自己填写 premium。</p></article>
+          <article class="concept"><span class="tag">Q3 · 治理状态</span><strong>X Layer 的 FlashBorrower 提案已经通过了吗？</strong><p><b>截至 2026-09-12，尚不能这样表述。</b>报告引用的白名单事项仍是论坛 <a href="https://governance.aave.com/t/direct-to-aip-add-x-layer-loop-tool-margin-trading-to-flashborrowers/25551">Direct-to-AIP</a>，页面列出的下一步仍是进入 AIP 投票；不要与已经在 2026-03-29 执行的 <a href="https://vote.onaave.com/proposal/?proposalId=460">Aave V3.6 X Layer 上线提案</a>混淆。本笔 premium 为 0 也不是白名单已经执行的证据。</p></article>
+          <article class="concept"><span class="tag">Q4 · 用户签名</span><strong>用户是否签了三笔交易？</strong><p><b>链上显示是三笔独立交易。</b>它们均由 <code>0xb06f…3546</code> 发出，nonce 连续为 0、1、2，分别在连续三个区块设置 eMode、授权 0.01 xETH、调用 flashLoan。链上可以确认三次独立的 EOA 签名授权，但不能证明钱包界面具体展示了几次点击提示。详见<a href="#s4">前置动作</a>。</p></article>
+        </div>
       </section>
 
       <section class="section" id="s9">
