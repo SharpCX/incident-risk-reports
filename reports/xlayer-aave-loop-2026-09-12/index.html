@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>一笔交易如何完成 3.34× 循环贷 · X Layer / Aave V3 机制研究</title>
+  <meta name="description" content="逐层解码 X Layer 交易 0x02343b…02a57：Aave V3 flashLoan 债务模式如何把多轮存入、借出、兑换和再存入压缩为一笔原子交易。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="一笔交易如何完成 3.34× 循环贷">
+  <meta property="og:description" content="X Layer 上 Aave V3 闪电贷债务模式的交易级拆解。">
+  <meta property="og:url" content="https://sharpcx.github.io/incident-risk-reports/reports/xlayer-aave-loop-2026-09-12/">
+  <meta property="og:image" content="https://sharpcx.github.io/incident-risk-reports/assets/site-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://sharpcx.github.io/incident-risk-reports/reports/xlayer-aave-loop-2026-09-12/">
+  <link rel="icon" href="../../assets/site-icon.svg" type="image/svg+xml">
+  <style>
+    :root{--ink:#172236;--muted:#627085;--line:#d9e3eb;--paper:#fff;--wash:#f3f7fa;--navy:#102a45;--blue:#176f9f;--cyan:#1a8ca4;--green:#267054;--red:#a63d45;--amber:#976106;--violet:#6255a6;--shadow:0 18px 48px rgba(16,42,69,.09)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:linear-gradient(180deg,#edf4f7 0,#f9fbfc 30rem,#f3f6f8 100%);font:15px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Noto Sans CJK SC",sans-serif}.wrap{width:min(1190px,calc(100% - 40px));margin:auto}a{color:#17658e;text-decoration-thickness:1px;text-underline-offset:2px}code,.mono{font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;overflow-wrap:anywhere}.hero{position:relative;overflow:hidden;color:#fff;background:radial-gradient(circle at 84% 18%,rgba(83,222,226,.24),transparent 25rem),radial-gradient(circle at 12% 94%,rgba(120,105,223,.2),transparent 24rem),linear-gradient(135deg,#0b2239,#164767 68%,#176f82);padding:25px 0 52px}.hero:after{content:"";position:absolute;inset:auto -7rem -14rem auto;width:32rem;height:32rem;border:1px solid rgba(255,255,255,.12);border-radius:50%;box-shadow:0 0 0 4rem rgba(255,255,255,.025),0 0 0 9rem rgba(255,255,255,.018)}.topbar{position:relative;z-index:1;display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:45px}.brand{color:#fff;text-decoration:none;font-weight:760}.brand span{color:#93e1e5}.topbar small{color:#c8dce7}.eyebrow{color:#8fe1e2;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}.hero h1{position:relative;z-index:1;max-width:1080px;margin:12px 0 13px;font:700 clamp(38px,5.5vw,67px)/1.08 Georgia,"Songti SC",serif}.hero p{position:relative;z-index:1;max-width:850px;margin:0;color:#dbeaf2;font-size:17px}.stamp{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:8px;margin-top:23px}.stamp span{padding:5px 9px;border:1px solid rgba(255,255,255,.25);border-radius:999px;color:#dcebf3;font-size:12px}.layout{display:grid;grid-template-columns:238px minmax(0,1fr);gap:24px;padding:30px 0 72px}.toc{position:sticky;top:18px;align-self:start;padding:16px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.93);box-shadow:var(--shadow)}.toc b{display:block;margin-bottom:9px;color:var(--navy)}.toc a{display:block;padding:5px 7px;border-radius:7px;color:#58697d;text-decoration:none;font-size:12px}.toc a:hover{background:#eaf3f7;color:#164e70}.section{margin-bottom:18px;padding:27px 29px;border:1px solid var(--line);border-radius:17px;background:var(--paper);box-shadow:var(--shadow)}.kicker{color:#718196;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.section h2{margin:5px 0 15px;color:var(--navy);font:700 28px/1.25 Georgia,"Songti SC",serif}.section h3{margin:21px 0 8px;color:#294861;font-size:16px}.section p{margin:8px 0}.lede{font-size:18px;color:#243c52}.label{display:inline-block;margin-right:4px;padding:2px 7px;border-radius:5px;white-space:nowrap;font-size:12px;font-weight:760}.chain{color:#1c6849;background:#e8f6ee}.source{color:#175c8b;background:#e7f1fa}.derive{color:#815200;background:#fff1dc}.risk{color:#922f3a;background:#fbe9eb}.scope{color:#554592;background:#efecfa}.note{margin:14px 0;padding:13px 15px;border-left:4px solid var(--blue);border-radius:0 9px 9px 0;background:#eef6fa}.note.good{border-left-color:var(--green);background:#edf8f2}.note.danger{border-left-color:var(--red);background:#fff0f1}.note.amber{border-left-color:var(--amber);background:#fff7e8}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin:14px 0}.card{padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--wash)}.card small{display:block;color:var(--muted);margin-bottom:7px}.card b{display:block;color:var(--navy);font:700 25px/1.08 Georgia,serif}.card.blue{border-color:#c9dfea;background:#eff8fb}.card.green{border-color:#c8e4d5;background:#f1faf5}.card.red{border-color:#ecc8cb;background:#fff3f3}.two{display:grid;grid-template-columns:1fr 1fr;gap:15px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.concept{padding:17px;border:1px solid var(--line);border-radius:13px;background:linear-gradient(180deg,#fbfdfe,#f3f7f9)}.concept strong{display:block;margin-bottom:8px;color:var(--navy);font-size:16px}.concept .tag{display:inline-block;margin-bottom:8px;padding:2px 7px;border-radius:999px;background:#e5eff5;color:#31546e;font-size:11px}.table-wrap{overflow:auto;margin:13px 0;border:1px solid var(--line);border-radius:12px}table{width:100%;min-width:760px;border-collapse:collapse;font-size:13px}th,td{padding:10px 11px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#edf3f7;color:#34495e;text-align:left}tr:last-child td{border-bottom:0}.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}.steps{list-style:none;padding:0;margin:10px 0}.steps li{position:relative;margin-left:7px;padding:0 0 16px 27px;border-left:2px solid #d8e4eb}.steps li:last-child{border-left-color:transparent}.steps li:before{content:"";position:absolute;left:-7px;top:5px;width:11px;height:11px;border:3px solid #dff3f5;border-radius:50%;background:#1a8ca4}.steps time{font-weight:760;color:#244969}.flow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin:16px 0}.flow-step{position:relative;min-height:142px;padding:13px 11px;border:1px solid #cadce5;border-radius:12px;background:linear-gradient(180deg,#fbfdfe,#edf5f8)}.flow-step:not(:last-child):after{content:"→";position:absolute;z-index:2;right:-13px;top:47%;color:#3d819b;font-weight:900}.flow-step b{display:block;margin-bottom:7px;color:var(--navy);font-size:13px}.flow-step .n{display:inline-grid;place-items:center;width:21px;height:21px;margin-bottom:8px;border-radius:50%;color:#fff;background:var(--cyan);font-size:11px;font-weight:800}.flow-step p{margin:0;color:#526477;font-size:12px;line-height:1.55}.equation{margin:13px 0;padding:14px 16px;border:1px solid #d8e0ed;border-radius:12px;background:#f7f6fc;color:#2f3856;font:15px/1.8 ui-monospace,SFMono-Regular,Menlo,monospace;overflow:auto}.bar-set{margin:16px 0}.bar-row{display:grid;grid-template-columns:175px 1fr 92px;gap:11px;align-items:center;margin:10px 0}.bar-track{height:14px;overflow:hidden;border-radius:999px;background:#e7edf1}.bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#1688a3,#4fb5bc)}.bar-fill.amber{background:linear-gradient(90deg,#b87b16,#e0a545)}.bar-fill.red{background:linear-gradient(90deg,#a53f48,#d96b72)}.bar-value{text-align:right;font-variant-numeric:tabular-nums}.call{padding:14px 15px;border:1px solid #d5e0e7;border-radius:11px;background:#101b2a;color:#dbe9f4;overflow:auto;font:12px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace}.call .hi{color:#7de0d5}.call .dim{color:#91a7b9}.source-list{columns:2;column-gap:30px}.source-list li{break-inside:avoid;margin:0 0 8px}.subtle{color:var(--muted);font-size:13px}.footer{padding:8px 0 42px;text-align:center;color:var(--muted);font-size:12px}@media(max-width:1050px){.flow{grid-template-columns:repeat(4,1fr)}.flow-step:not(:last-child):after{display:none}}@media(max-width:920px){.layout{grid-template-columns:1fr}.toc{display:none}.grid{grid-template-columns:1fr 1fr}.two,.three{grid-template-columns:1fr}.source-list{columns:1}}@media(max-width:620px){.wrap{width:min(100% - 22px,1190px)}.hero{padding-top:18px}.topbar{margin-bottom:34px}.topbar small{display:none}.section{padding:21px 18px}.grid,.flow{grid-template-columns:1fr}.bar-row{grid-template-columns:1fr}.bar-value{text-align:left}}@media print{body{background:#fff}.hero{padding:25px 0;background:#fff;color:#111;border-bottom:2px solid #123}.hero p,.hero .eyebrow,.stamp span,.topbar small{color:#333}.layout{display:block;padding-top:12px}.toc{display:none}.section{margin:0;padding:12px 0;border:0;box-shadow:none}.grid,.two,.three,.table-wrap,.flow{break-inside:avoid}a{color:#111}.source-list{columns:2}}
+    .flow-step p{overflow-wrap:anywhere}
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <div class="topbar"><a class="brand" href="../../"><span>◈</span> Incident Risk Reports</a><small>机制研究 · 可复现链上拆解</small></div>
+      <div class="eyebrow">Mechanism Research · X Layer · Aave V3</div>
+      <h1>一笔交易如何完成 3.34× 循环贷</h1>
+      <p>逐层解码 <span class="mono">0x02343b…02a57</span>：Aave V3 的闪电贷债务模式如何把“存入—借出—兑换—再存入”的多轮操作，压缩成一笔原子交易。</p>
+      <div class="stamp"><span>数据截止：2026-09-12 01:42:03 CST</span><span>区块 70,379,487</span><span>Chain ID 196</span><span>版本 v1</span><span>正常产品机制，不是攻击</span></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="toc" aria-label="目录"><b>报告目录</b><a href="#s1">01 · 结论与口径</a><a href="#s2">02 · 三个概念</a><a href="#s3">03 · 参与者与合约</a><a href="#s4">04 · 建仓前置动作</a><a href="#s5">05 · Calldata 解码</a><a href="#s6">06 · 完整交易时序</a><a href="#s7">07 · 资金逐项对账</a><a href="#s8">08 · Aave 源码机制</a><a href="#s9">09 · 为什么等价于循环贷</a><a href="#s10">10 · 最终仓位与健康度</a><a href="#s11">11 · 兑换成本</a><a href="#s12">12 · 控制与风险</a><a href="#s13">13 · 复现与来源</a></aside>
+
+    <main>
+      <section class="section" id="s1">
+        <div class="kicker">01 / Decision First</div><h2>结论：不是多轮显式循环，而是一次性建立同样的资产负债表</h2>
+        <p class="lede"><b>这笔交易调用 Aave V3 <code>flashLoan</code>，把 <code>interestRateModes</code> 设为 <code>[2]</code>。</b>Aave 先放出 0.02335872 xETH；执行器叠加用户投入的 0.01 xETH，把合计 0.03335872 xETH 换为 xBETH 并存入 Aave。回调结束后，Aave 不拉回这笔本金，而是在用户地址上建立等额的 xETH 浮动利率债务。</p>
+        <div class="grid"><div class="card blue"><small>用户本金</small><b>0.01 xETH</b></div><div class="card"><small>建立浮动债务</small><b>0.02335872</b></div><div class="card green"><small>最终抵押</small><b>0.03288061</b></div><div class="card"><small>最终健康因子</small><b>1.28512</b></div></div>
+        <div class="note good"><b>一句话：</b>闪电流动性只负责让“钱先到位”；抵押品存入后，临时流动性被转成普通浮动债务。因此这是原子化开杠杆仓位，不是借款在交易末消失。</div>
+        <ul><li><span class="label chain">【链上可验证】</span><a href="https://web3.okx.com/zh-hans/explorer/x-layer/evm/tx/0x02343bd307a228a9c93ef52b5aab50cdb6f4326790cd9f23bccb14e3c0b02a57">主交易</a>在区块 70,379,487 成功，Gas Used 为 699,445，交易记录中的有效 Gas Price 与手续费均为 0。</li><li><span class="label source">【源码确认】</span>Aave 接口把模式 2 定义为：按闪借数量向 <code>onBehalfOf</code> 地址建立 variable-rate debt。</li><li><span class="label scope">【口径限定】</span>“3.34×”是仓位规模相对初始净权益的近似倍数，不是收益倍数，也不是可无风险提取的资产。</li></ul>
+      </section>
+
+      <section class="section" id="s2">
+        <div class="kicker">02 / Concepts</div><h2>普通闪电贷、债务模式与循环贷不是一回事</h2>
+        <div class="three">
+          <article class="concept"><span class="tag">Classic flash loan</span><strong>经典闪电贷</strong><p>同一交易中无抵押借出资金、执行策略，并在结束前归还本金与费用。还不上，整笔交易回滚。</p></article>
+          <article class="concept"><span class="tag">Aave mode = 2</span><strong>闪电贷债务模式</strong><p>资金仍先在回调中使用，但结束时不把本金转回池子；Aave 在抵押检查通过后为指定账户建立浮动债务。</p></article>
+          <article class="concept"><span class="tag">Looping</span><strong>循环贷</strong><p>把资产 A 孤押，借出资产 B，再把 B 换回 A 并重新存入；重复后同时放大抵押和债务。</p></article>
+        </div>
+        <p><span class="label source">【官方说明】</span><a href="https://web3.okx.com/zh-hans/help/loop">OKX 循环借贷 FAQ</a>对产品的描述是：存入资产 A、借出资产 B、换成 A 再存入，并按循环次数重复。Aave 治理材料则明确说明，X Layer Loop Tool 的目的就是免去用户手工执行多次 supply、borrow 和 re-supply。</p>
+        <div class="note amber"><b>原子性解决的是“做到一半”的执行风险：</b>兑换失败、最小输出不满足、Aave 拒绝新债务或健康因子检查不通过时，相关状态会一起回滚。它不会消除交易完成后的利率、价格、流动性、治理和清算风险。</div>
+      </section>
+
+      <section class="section" id="s3">
+        <div class="kicker">03 / Actors</div><h2>参与者与合约身份</h2>
+        <div class="table-wrap"><table><thead><tr><th>角色</th><th>地址</th><th>本笔作用</th></tr></thead><tbody>
+          <tr><td>用户 / 债务承担者</td><td class="mono"><a href="https://web3.okx.com/zh-hans/explorer/x-layer/evm/address/0xb06fe350b6337dc19e3d63b702d0ace49a7d3546">0xb06fe350b6337dc19e3d63b702d0ace49a7d3546</a></td><td>提供 0.01 xETH；接收 aToken；承担 xETH 浮动债务</td></tr>
+          <tr><td>Aave V3 X Layer Pool</td><td class="mono"><a href="https://web3.okx.com/zh-hans/explorer/x-layer/evm/address/0xe3f3caefdd7180f884c01e57f65df979af84f116">0xe3f3caefdd7180f884c01e57f65df979af84f116</a></td><td>放出闪电流动性、接收抵押并建立债务</td></tr>
+          <tr><td>LoopExecutor</td><td class="mono"><a href="https://web3.okx.com/zh-hans/explorer/x-layer/evm/address/0x714a871d3b471ff7ee6a1896b16c5f55884fd910">0x714a871d3b471ff7ee6a1896b16c5f55884fd910</a></td><td>接收回调、拉取本金、兑换并代表用户 supply</td></tr>
+          <tr><td>xETH / 债务资产</td><td class="mono"><a href="https://web3.okx.com/zh-hans/explorer/x-layer/evm/address/0xe7b000003a45145decf8a28fc755ad5ec5ea025a">0xe7b000003a45145decf8a28fc755ad5ec5ea025a</a></td><td>闪借资产、用户本金资产和最终债务资产</td></tr>
+          <tr><td>xBETH / 抵押资产</td><td class="mono"><a href="https://web3.okx.com/zh-hans/explorer/x-layer/evm/address/0xafeab3b85b6a56cf5f02317f0f7a23340eb983d7">0xafeab3b85b6a56cf5f02317f0f7a23340eb983d7</a></td><td>兑换输出；非 rebasing 生息资产</td></tr>
+          <tr><td>aXlrxBETH</td><td class="mono"><a href="https://web3.okx.com/zh-hans/explorer/x-layer/evm/address/0xe9e78053f1ef084f8cd01dbe8cce95c6b0944d32">0xe9e78053f1ef084f8cd01dbe8cce95c6b0944d32</a></td><td>Aave 抵押凭证，铸给用户</td></tr>
+          <tr><td>xETH variable debt token</td><td class="mono"><a href="https://web3.okx.com/zh-hans/explorer/x-layer/evm/address/0xb756fc7065369602f2ccb8356283e8b997fdfe2a">0xb756fc7065369602f2ccb8356283e8b997fdfe2a</a></td><td>记录用户的浮动利率债务</td></tr>
+          <tr><td>OKX DEX Router</td><td class="mono"><a href="https://web3.okx.com/zh-hans/explorer/x-layer/evm/address/0x7c5bee2a8091c3ef39072f64f18fac913060aeaf">0x7c5bee2a8091c3ef39072f64f18fac913060aeaf</a></td><td>路由 xETH → xBETH</td></tr>
+          <tr><td>Uniswap V3 xBETH/xETH Pool</td><td class="mono"><a href="https://web3.okx.com/zh-hans/explorer/x-layer/evm/address/0x84d4dbeebff5f77c63f36bd0dcb18121aa9ac8fc">0x84d4dbeebff5f77c63f36bd0dcb18121aa9ac8fc</a></td><td>实际成交池；<code>fee() = 100</code>，即 0.01% 费率档</td></tr>
+        </tbody></table></div>
+        <p class="subtle">Aave 官方地址簿确认 X Layer Pool、xETH、aToken、variable-debt token 及 eMode 类别；OKX DEX 文档确认 Loop Tool 与 Router 地址。中间还经过源码未验证的 converter / wrapper <span class="mono">0x4c500d…825b1</span> 与 Uniswap V3 适配器 <span class="mono">0xcc96b6…b95d2</span>；因此本报告不对前者附加未经证实的协议归属。</p>
+      </section>
+
+      <section class="section" id="s4">
+        <div class="kicker">04 / Prerequisites</div><h2>主交易前连续两块完成账户配置</h2>
+        <ol class="steps">
+          <li><time>01:42:01 CST · 区块 70,379,485</time><br><span class="label chain">【链上可验证】</span><a href="https://web3.okx.com/zh-hans/explorer/x-layer/evm/tx/0x2caf96fe0c6574495b5472602b182e3cd75fcce6fc365efdfea65325749f38bf"><code>setUserEMode(5)</code></a>。类别 5 名为 <code>xBETH__xETH</code>；固定区块调用返回最大 LTV 88%、清算阈值 90%、清算奖励参数 102%（即 2% bonus）。</li>
+          <li><time>01:42:02 CST · 区块 70,379,486</time><br><span class="label chain">【链上可验证】</span><a href="https://web3.okx.com/zh-hans/explorer/x-layer/evm/tx/0x5ee81bdf5de8e958a36e53f54f5b0db27b82df1c53592fbfaa907160af3b67ed"><code>approve(LoopExecutor, 0.01 xETH)</code></a>。授权额恰好等于本次用户本金。</li>
+          <li><time>01:42:03 CST · 区块 70,379,487</time><br><span class="label chain">【链上可验证】</span>用户直接调用 Aave Pool 的 <code>flashLoan</code>，接收器为 LoopExecutor，债务记到用户自己名下。</li>
+        </ol>
+        <div class="note"><b>参数不能混用：</b>88% 是此 eMode 允许的新借款上限，90% 是清算计算使用的阈值；本笔交易实际债务/抵押价值仅约 70.03%，不是 88%。</div>
+      </section>
+
+      <section class="section" id="s5">
+        <div class="kicker">05 / Calldata</div><h2>外层调用与执行器参数</h2>
+        <p><span class="label chain">【链上解码】</span>交易输入 selector 为 <code>0xab9c4b5d</code>，对应：</p>
+        <div class="call"><span class="hi">flashLoan</span>(<br>&nbsp;&nbsp;receiverAddress = <span class="hi">LoopExecutor</span>,<br>&nbsp;&nbsp;assets = [<span class="hi">xETH</span>],<br>&nbsp;&nbsp;amounts = [<span class="hi">0.02335872e18</span>],<br>&nbsp;&nbsp;interestRateModes = [<span class="hi">2</span>],<br>&nbsp;&nbsp;onBehalfOf = <span class="hi">user</span>,<br>&nbsp;&nbsp;params = <span class="dim">abi.encode(OpenParams)</span>,<br>&nbsp;&nbsp;referralCode = 0<br>)</div>
+        <h3>OpenParams</h3>
+        <div class="table-wrap"><table><thead><tr><th>字段</th><th>解码值</th><th>作用</th></tr></thead><tbody>
+          <tr><td><code>collateralAsset</code></td><td class="mono">xBETH · 0xafeab3…983d7</td><td>最终存入 Aave 的抵押资产</td></tr>
+          <tr><td><code>principalAmount</code></td><td class="num">0.01 xETH</td><td>从用户拉取的自有本金</td></tr>
+          <tr><td><code>principalIsDebtAsset</code></td><td><code>true</code></td><td>本金与闪借/债务资产同为 xETH</td></tr>
+          <tr><td><code>minSwapOut</code></td><td class="num">0.032556249424063861 xBETH</td><td>执行器层的最小兑换输出</td></tr>
+          <tr><td><code>minHealthFactor</code></td><td class="num">1.26016</td><td>建仓后的健康度下限</td></tr>
+          <tr><td><code>orderId</code></td><td class="num">0</td><td>本笔订单标识</td></tr>
+          <tr><td>route</td><td>1 个路由项</td><td>辅助合约 → OKX Router → UniV3 适配器/池</td></tr>
+        </tbody></table></div>
+        <p>内层 OKX Router selector 为 <code>0x0c307f76</code>（<code>dagSwapTo</code>）；内层最小输出约为 0.032551807747858643 xBETH，略低于执行器外层阈值。实际输出比外层 <code>minSwapOut</code> 高约 0.9963%。</p>
+      </section>
+
+      <section class="section" id="s6">
+        <div class="kicker">06 / Atomic Sequence</div><h2>一笔交易内的完整时序</h2>
+        <div class="flow" aria-label="从闪借到建立债务的七步资金流">
+          <div class="flow-step"><span class="n">1</span><b>Aave 放款</b><p>aXETH 储备向 LoopExecutor 转出 0.02335872 xETH。</p></div>
+          <div class="flow-step"><span class="n">2</span><b>叠加本金</b><p>LoopExecutor 从用户拉取 0.01 xETH，总额变为 0.03335872。</p></div>
+          <div class="flow-step"><span class="n">3</span><b>路由兑换</b><p>资金进入 OKX Router，并由 UniV3 适配器访问 xBETH/xETH 池。</p></div>
+          <div class="flow-step"><span class="n">4</span><b>收到 xBETH</b><p>执行器收到约 0.032880614 xBETH。</p></div>
+          <div class="flow-step"><span class="n">5</span><b>代表用户存入</b><p>执行器把全部 xBETH supply 到 Aave，受益人为用户。</p></div>
+          <div class="flow-step"><span class="n">6</span><b>取得抵押凭证</b><p>用户收到同数量 aXlrxBETH，Aave 启用该资产作抵押。</p></div>
+          <div class="flow-step"><span class="n">7</span><b>建立长期债务</b><p>Aave 校验账户后铸造 0.02335872 xETH 的 variable debt。</p></div>
+        </div>
+        <p><span class="label source">【源码确认】</span><code>executeOperation</code> 是 Aave 把资金交给接收器后的回调入口；兑换与 supply 都发生在回调期间。回调返回后，Aave 才进入“归还资金”或“建立债务”二选一的结算分支。</p>
+        <div class="note danger"><b>关键误区：</b>这里没有“先把闪电贷还回去，再另借一笔”。债务模式直接以 <code>releaseUnderlying = false</code> 调用借款逻辑：资金早已在回调前释放，结算阶段只记债务，不再次转出资金。</div>
+      </section>
+
+      <section class="section" id="s7">
+        <div class="kicker">07 / Reconciliation</div><h2>资金逐项对账：输入、兑换、抵押与债务闭合</h2>
+        <div class="table-wrap"><table><thead><tr><th>事件/动作</th><th class="num">xETH 变化</th><th class="num">xBETH 变化</th><th>核对结果</th></tr></thead><tbody>
+          <tr><td>Aave 储备 → LoopExecutor</td><td class="num">+0.023358720000000000</td><td class="num">—</td><td>等于 flash amount</td></tr>
+          <tr><td>用户 → LoopExecutor</td><td class="num">+0.010000000000000000</td><td class="num">—</td><td>等于精确授权本金</td></tr>
+          <tr><td>LoopExecutor → DEX 路由</td><td class="num">−0.033358720000000000</td><td class="num">—</td><td>两项 xETH 输入完全相加</td></tr>
+          <tr><td>UniV3 Pool → LoopExecutor</td><td class="num">—</td><td class="num">+0.032880613886725903</td><td>实际兑换输出</td></tr>
+          <tr><td>LoopExecutor → Aave</td><td class="num">—</td><td class="num">−0.032880613886725903</td><td>swap 输出与 supply 数量完全相等</td></tr>
+          <tr><td>Aave → 用户账户</td><td class="num">0.023358720000000000 债务</td><td class="num">0.032880613886725903 aToken</td><td>资产与负债同时建立</td></tr>
+          <tr><td>FlashLoan premium</td><td class="num">0</td><td class="num">—</td><td>本笔事件值为 0</td></tr>
+        </tbody></table></div>
+        <p class="subtle">xETH variable-debt token 的 <code>Transfer</code> 日志比借款本金多 1 wei，这是 scaled balance 与指数换算的舍入表现；Aave <code>Borrow</code> 与 <code>FlashLoan</code> 事件记录的本金均为精确 0.02335872 xETH，不应把 1 wei 当作另一笔借款。</p>
+      </section>
+
+      <section class="section" id="s8">
+        <div class="kicker">08 / Protocol Logic</div><h2>Aave 为什么允许闪借本金变成长期债务</h2>
+        <div class="two"><div><h3>接口层</h3><p><span class="label source">【源码确认】</span><a href="https://github.com/aave-dao/aave-v3-origin/blob/main/src/contracts/interfaces/IPool.sol">Aave <code>IPool.flashLoan</code> 接口</a>把 <code>interestRateModes</code> 定义为：0 不开债、无法收回则回滚；1 已弃用；2 按闪借金额向 <code>onBehalfOf</code> 地址建立浮动利率债务。</p></div><div><h3>执行层</h3><p><span class="label source">【源码确认】</span><a href="https://github.com/aave-dao/aave-v3-origin/blob/main/src/contracts/protocol/libraries/logic/FlashLoanLogic.sol">FlashLoanLogic</a>先转出资产并调用接收器；模式为 0 时走 repayment，非 0 时走 <code>BorrowLogic.executeBorrow</code>，并设置 <code>releaseUnderlying: false</code>。</p></div></div>
+        <div class="call"><span class="dim">// 逻辑化简，非逐字源码</span><br>transferUnderlyingTo(receiver, amount);<br>receiver.<span class="hi">executeOperation</span>(...);<br><br>if (mode == 0) {<br>&nbsp;&nbsp;pullBack(amount + premium);<br>} else {<br>&nbsp;&nbsp;<span class="hi">executeBorrow</span>(onBehalfOf, amount, mode, releaseUnderlying = false);<br>&nbsp;&nbsp;premium = 0;<br>}</div>
+        <p><span class="label source">【治理材料】</span><a href="https://governance.aave.com/t/direct-to-aip-add-x-layer-loop-tool-margin-trading-to-flashborrowers/25551">Aave 关于 X Layer Loop Tool 的提案</a>明确写明：工具让用户无需手动完成多次 supply、borrow 和 re-supply，并申请把指定合约加入 FlashBorrower 白名单以免除闪电贷费用。该白名单只豁免指定合约的 flashloan fee，不改变储备或风险参数。</p>
+        <div class="note amber"><b>“premium 为 0”要分清原因：</b>Aave 核心逻辑对转成债务的 mode=2 分支本就不收 premium；白名单则还可免除指定合约执行普通闪电贷操作时的费用。两者不能混为一谈，更不能推广为所有 Aave 闪电贷都免费。</div>
+      </section>
+
+      <section class="section" id="s9">
+        <div class="kicker">09 / Loop Equivalence</div><h2>为什么经济结果等价于循环贷</h2>
+        <p>传统循环贷每一轮把新增借款换成抵押品再存入。若每轮债务比例为 <i>q</i>，忽略手续费与价格影响，抵押规模是一条几何级数：</p>
+        <div class="equation">C = E × (1 + q + q² + …) = E / (1 − q)<br>D = C − E = E × q / (1 − q)<br>Leverage = C / E = 1 / (1 − q)</div>
+        <p>本笔交易直接指定最终需要的债务 <code>D = 0.02335872 xETH</code>，一次性拿到 <code>E + D = 0.03335872 xETH</code> 进行兑换，跳过中间每一轮，却落在几乎相同的最终资产负债表上。</p>
+        <div class="grid"><div class="card"><small>名义部署额 / 初始本金</small><b>3.335872×</b></div><div class="card"><small>最终抵押 / 净权益</small><b>3.336936×</b></div><div class="card"><small>实际债务 / 抵押价值</small><b>70.0324%</b></div><div class="card"><small>88% LTV 理论极限</small><b>8.3333×</b></div></div>
+        <p><span class="label derive">【机制推导】</span>88% LTV 的无摩擦无限循环理论值是 <code>1 / (1 − 0.88) = 8.33×</code>，但本笔并未用满额度。实际债务率约 70.03%，对应约 3.34× 的最终仓位。</p>
+        <p class="subtle">“等价”仅指最终抵押、债务与权益关系近似一致。一笔聚合交换和多轮小额交换在价格影响、手续费、交易排序与失败概率上并不完全相同。</p>
+      </section>
+
+      <section class="section" id="s10">
+        <div class="kicker">10 / Account State</div><h2>固定区块下的最终仓位与清算距离</h2>
+        <p><span class="label chain">【链上可验证】</span>在区块 70,379,487 对 Aave Pool 调用 <code>getUserAccountData(0xb06f…3546)</code>，返回：</p>
+        <div class="table-wrap"><table><thead><tr><th>指标</th><th class="num">数值</th><th>解释</th></tr></thead><tbody>
+          <tr><td>总抵押价值</td><td class="num">$85.99092965</td><td>Aave 预言机基准货币，8 位精度</td></tr>
+          <tr><td>总债务价值</td><td class="num">$60.22149909</td><td>xETH 浮动债务</td></tr>
+          <tr><td>可继续借款</td><td class="num">$15.45051900</td><td>按当前 88% LTV 计算的剩余额度</td></tr>
+          <tr><td>当前 LTV</td><td class="num">88.00%</td><td>新借款能力参数</td></tr>
+          <tr><td>清算阈值</td><td class="num">90.00%</td><td>健康因子使用的风险参数</td></tr>
+          <tr><td>健康因子</td><td class="num">1.285119730568965482</td><td>低于 1 时进入可清算状态</td></tr>
+          <tr><td>净权益</td><td class="num">约 $25.76943056</td><td>抵押价值减债务价值</td></tr>
+        </tbody></table></div>
+        <div class="equation">Health Factor = 抵押价值 × 清算阈值 ÷ 债务价值<br>= 85.99092965 × 90% ÷ 60.22149909 ≈ 1.28512</div>
+        <div class="bar-set"><div class="bar-row"><span>本笔实际债务率</span><div class="bar-track"><div class="bar-fill" style="width:70.0324%"></div></div><span class="bar-value">70.03%</span></div><div class="bar-row"><span>eMode 最大 LTV</span><div class="bar-track"><div class="bar-fill amber" style="width:88%"></div></div><span class="bar-value">88.00%</span></div><div class="bar-row"><span>清算阈值</span><div class="bar-track"><div class="bar-fill red" style="width:90%"></div></div><span class="bar-value">90.00%</span></div></div>
+        <p><span class="label derive">【简化压力测试】</span><code>1 − 1/HF ≈ 22.19%</code>。在债务币价格、利息、预言机和协议参数均不变的静态假设下，抵押品相对债务资产再下跌约 22.2% 会触及 HF=1。这不是保证的“安全垫”；借款利息、参数调整、预言机差异和流动性会改变实际清算路径。</p>
+      </section>
+
+      <section class="section" id="s11">
+        <div class="kicker">11 / Execution Cost</div><h2>xBETH 数量更少，不等于 1.4% 滑点</h2>
+        <p>xBETH 是通过汇率增长累积收益的非 rebasing 资产，每枚 xBETH 在该区块的 Aave 预言机估值高于一枚 xETH。固定区块价格分别约为 $2,615.24708617 与 $2,578.11639876，对应汇率约 <b>1.014402254 xETH / xBETH</b>。</p>
+        <div class="equation">0.032880613886725903 xBETH × 1.014402254075<br>≈ 0.033354168842 xETH<br><br>相对 0.03335872 xETH 输入的价值差<br>≈ 0.000004551158 xETH = 0.013643%</div>
+        <div class="two"><div class="card green"><small>实际输出高于外层 minSwapOut</small><b>约 0.9963%</b></div><div class="card"><small>UniV3 池费率档</small><b>0.01%</b></div></div>
+        <p><span class="label derive">【机制推导】</span>0.013643% 是按 Aave 固定区块估值计算的总兑换摩擦，包含池费、价格影响和估值离散，不应全部命名为“滑点”。本笔 Gas Used 为 699,445，但有效 Gas Price 为 0；这只是该笔交易的链上结果，不代表未来 X Layer 交易永远没有网络费。</p>
+      </section>
+
+      <section class="section" id="s12">
+        <div class="kicker">12 / Controls &amp; Risks</div><h2>原子化提高执行完整性，但风险链更长</h2>
+        <div class="three">
+          <article class="concept"><span class="tag">交易内控制</span><strong>失败即回滚</strong><p><code>minSwapOut</code>、内层 DEX 最小输出、<code>minHealthFactor</code>、Aave 抵押检查和 eMode 约束共同决定交易能否落地。</p></article>
+          <article class="concept"><span class="tag">交易后风险</span><strong>债务持续存在</strong><p>xETH 浮动借款利息继续累积；抵押收益、借款 APY、奖励与汇率变化决定净 carry，健康因子会随时间变化。</p></article>
+          <article class="concept"><span class="tag">组合依赖</span><strong>多合约信任链</strong><p>Aave、LoopExecutor、OKX Router/适配器、UniV3 池、xETH 与 xBETH 的发行和预言机共同影响结果。</p></article>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>风险</th><th>如何发生</th><th>本笔可见缓解 / 未覆盖项</th></tr></thead><tbody>
+          <tr><td>清算</td><td>抵押相对债务下跌、借款利息累积或参数收紧使 HF 下降</td><td>落地 HF 1.285；低于 1 仍可被清算</td></tr>
+          <tr><td>相对脱锚与估值</td><td>xBETH/xETH 市价、兑换率或 Aave 预言机出现偏差</td><td>eMode 假设高度相关，但不会制造相关性</td></tr>
+          <tr><td>退出流动性</td><td>平仓时 xBETH AMM 深度不足或滑点超限</td><td>OKX FAQ 明确提示链上 xBETH AMM 流动性有限；赎回可能失败或延迟</td></tr>
+          <tr><td>利差</td><td>浮动借款成本高于抵押收益与激励</td><td>本报告不把瞬时 APY 当作锁定收益</td></tr>
+          <tr><td>路由与合约</td><td>错误 calldata、适配器/路由缺陷、授权处理或外部调用异常</td><td>本笔有双层最小输出且成功闭合；不等于完成了形式化安全审计</td></tr>
+          <tr><td>中心化与治理</td><td>xAsset 发行、升级、暂停、deny list、汇率更新，或 Aave 参数治理变化</td><td>xBETH/xETH 有 3 日 timelock 等控制，但仍存在运营和权限依赖</td></tr>
+          <tr><td>网络与 MEV</td><td>排序、报价过期、网络可用性或抢跑改变成交</td><td>原子回滚降低残仓风险，不保证报价可成交</td></tr>
+        </tbody></table></div>
+        <div class="note danger"><b>净收益框架：</b><code>抵押规模 × 抵押收益率 − 债务规模 × 浮动借款率 − 开/平仓成本</code>。杠杆会同时放大正利差和负利差；任何“预估 APY”都不是保本或锁定收益。</div>
+      </section>
+
+      <section class="section" id="s13">
+        <div class="kicker">13 / Reproduction &amp; Sources</div><h2>如何独立复现本报告</h2>
+        <ol><li>固定 X Layer Chain ID 196、区块 70,379,487 和主交易哈希。</li><li>通过 X Layer RPC 读取 <code>eth_getTransactionByHash</code>、<code>eth_getTransactionReceipt</code> 与区块时间。</li><li>用 Aave Pool ABI 解码外层 <code>flashLoan</code>；再用 LoopExecutor 的已验证 ABI 解码 <code>params/OpenParams</code>。</li><li>从 receipt 的 24 条日志中对账 ERC-20 <code>Transfer</code>、UniV3 <code>Swap</code>、Aave <code>Supply</code>、<code>Borrow</code>、<code>ReserveUsedAsCollateralEnabled</code> 与 <code>FlashLoan</code>。</li><li>检查前两块的 <code>setUserEMode(5)</code> 与精确额度 <code>approve</code>。</li><li>在固定区块调用 <code>getEModeCategoryData(5)</code>、<code>getUserAccountData(user)</code>、Aave Oracle <code>getAssetPrice(xETH/xBETH)</code> 及 UniV3 Pool <code>token0/token1/fee</code>。</li><li>断言：两项 xETH 输入之和等于 DEX 输入；DEX 输出等于 supply 数量；aToken 数量等于抵押数量；Borrow 本金等于 flash amount；premium 为 0；最终 HF 与公式相符。</li></ol>
+        <div class="note"><b>方法限制：</b>公开 RPC 对 <code>debug_traceTransaction</code> 返回“不在白名单”，因此本报告的调用路径由 calldata、24 条交易日志、固定区块 <code>eth_call</code>、已验证执行器页面与协议源码交叉重建。数值均绑定区块，不把当前界面值倒灌到历史交易。</div>
+        <h3>直接来源</h3>
+        <ol class="source-list">
+          <li><a href="https://web3.okx.com/zh-hans/explorer/x-layer/evm/tx/0x02343bd307a228a9c93ef52b5aab50cdb6f4326790cd9f23bccb14e3c0b02a57">X Layer 主交易</a></li>
+          <li><a href="https://web3.okx.com/zh-hans/explorer/x-layer/evm/tx/0x2caf96fe0c6574495b5472602b182e3cd75fcce6fc365efdfea65325749f38bf">eMode 前置交易</a></li>
+          <li><a href="https://web3.okx.com/zh-hans/explorer/x-layer/evm/tx/0x5ee81bdf5de8e958a36e53f54f5b0db27b82df1c53592fbfaa907160af3b67ed">xETH 授权前置交易</a></li>
+          <li><a href="https://web3.okx.com/zh-hans/explorer/x-layer/evm/address/0x714a871d3b471ff7ee6a1896b16c5f55884fd910">LoopExecutor 已验证合约</a></li>
+          <li><a href="https://github.com/aave-dao/aave-address-book/blob/main/src/AaveV3XLayer.sol">Aave V3 X Layer 地址簿</a></li>
+          <li><a href="https://github.com/aave-dao/aave-v3-origin/blob/main/src/contracts/interfaces/IPool.sol">Aave IPool 接口与模式说明</a></li>
+          <li><a href="https://github.com/aave-dao/aave-v3-origin/blob/main/src/contracts/protocol/libraries/logic/FlashLoanLogic.sol">Aave FlashLoanLogic</a></li>
+          <li><a href="https://governance.aave.com/t/direct-to-aip-add-x-layer-loop-tool-margin-trading-to-flashborrowers/25551">Aave：X Layer Loop Tool FlashBorrower 提案</a></li>
+          <li><a href="https://web3.okx.com/zh-hans/help/loop">OKX 循环借贷产品 FAQ</a></li>
+          <li><a href="https://web3.okx.com/onchainos/dev-docs/trade/dex-smart-contract">OKX DEX 与 Loop Tool 合约地址</a></li>
+          <li><a href="https://github.com/okxlabs/Web3-DEX-Router-EVM-V1/blob/main/contracts/8/DexRouter.sol">OKX DEX Router 源码</a></li>
+          <li><a href="https://developers.uniswap.org/docs/protocols/v3/deployments/v3-xlayer-deployments">Uniswap V3 X Layer 部署</a></li>
+          <li><a href="https://governance.aave.com/t/arfc-deploy-aave-v3-on-x-layer/23175/17">LlamaRisk：xBETH 架构、汇率与流动性评估</a></li>
+          <li><a href="https://www.okx.com/en-gb/xassets">OKX xAssets 资产与合约清单</a></li>
+        </ol>
+        <p class="subtle">本报告是技术机制研究，只分析指定历史交易及固定区块状态，不构成投资、法律或税务建议，也不对合约、资产发行人或收益作安全保证。</p>
+      </section>
+    </main>
+  </div>
+  <footer class="footer"><div class="wrap">Independent on-chain research · Fixed-block evidence · Not financial advice</div></footer>
+</body>
+</html>

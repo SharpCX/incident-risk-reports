@@ -48,6 +48,7 @@ main { padding: 52px 0 88px; }
 .report-meta { display: flex; gap: 9px; align-items: center; flex-wrap: wrap; color: var(--muted); font-size: 12px; }
 .pill { padding: 3px 8px; border-radius: 999px; background: #eef3f7; border: 1px solid var(--line); }
 .pill.critical { color: #9f3030; background: #fff0f0; border-color: #efcccc; }
+.pill.research { color: #245f76; background: #eaf7f8; border-color: #c1e1e5; }
 .report-card h3 { margin: 12px 0 9px; color: #163a5a; font: 700 26px/1.25 Georgia, "Songti SC", serif; }
 .summary { max-width: 750px; margin: 0; color: #506176; }
 .metrics { display: grid; grid-template-columns: repeat(2, minmax(112px, 1fr)); gap: 10px; align-self: stretch; }

@@ -1,5 +1,24 @@
 [
   {
+    "slug": "xlayer-aave-loop-2026-09-12",
+    "project": "X Layer / Aave V3",
+    "title": "一笔交易如何完成 3.34× 循环贷",
+    "date": "2026-09-12",
+    "eventDate": "2026-09-12",
+    "version": "v1",
+    "status": "机制已链上复核",
+    "severity": "research",
+    "chain": "X Layer",
+    "category": "Mechanism Research / Atomic Looping",
+    "summary": "Aave V3 先释放 0.02335872 xETH 闪电流动性，执行器叠加用户 0.01 xETH 换为 xBETH 并存入；mode=2 随后把闪借金额直接记为浮动债务，一笔交易形成约 3.34× 仓位。",
+    "metrics": [
+      { "label": "用户本金", "value": "0.01 xETH" },
+      { "label": "仓位杠杆", "value": "~3.34×" }
+    ],
+    "url": "reports/xlayer-aave-loop-2026-09-12/",
+    "languages": ["zh-CN"]
+  },
+  {
     "slug": "notional-v1-2026-09-04",
     "project": "Notional V1",
     "title": "Notional V1 Escrow 事故风险报告",
