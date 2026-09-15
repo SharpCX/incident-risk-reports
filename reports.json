@@ -1,5 +1,32 @@
 [
   {
+    "slug": "stablepair-hook-text-2026-09-14",
+    "project": "Uniswap / StablePair Hook",
+    "title": "StablePair Hook 与 LP 用户助手 · 完整文字版",
+    "date": "2026-09-14",
+    "eventDate": "2026-09-14",
+    "version": "完整报告",
+    "status": "机制与产品研究",
+    "severity": "research",
+    "chain": "Ethereum",
+    "category": "Mechanism Research / LP Assistant",
+    "summary": "完整说明 Hook 原理、基础收益快照、近 30 天数据与条件测算、用户直接持有 Uniswap LP 的助手形态，以及职责、风险和落地顺序。沿用 2026 年 9 月 14 日报告与数据。",
+    "metrics": [
+      {
+        "label": "内容形式",
+        "value": "完整文字"
+      },
+      {
+        "label": "数据日期",
+        "value": "2026-09-14"
+      }
+    ],
+    "url": "reports/stablepair-hook-2026-09-14/text/",
+    "languages": [
+      "zh-CN"
+    ]
+  },
+  {
     "slug": "stablepair-hook-2026-09-14",
     "project": "Uniswap / StablePair Hook",
     "title": "StablePair Hook 与 LP 用户助手 · 图解版",
