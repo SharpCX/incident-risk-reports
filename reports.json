@@ -1,5 +1,32 @@
 [
   {
+    "slug": "stablepair-hook-2026-09-14",
+    "project": "Uniswap / StablePair Hook",
+    "title": "StablePair Hook 与 LP 用户助手 · 图解版",
+    "date": "2026-09-14",
+    "eventDate": "2026-09-14",
+    "version": "PPT · 11 页",
+    "status": "机制与产品研究",
+    "severity": "research",
+    "chain": "Ethereum",
+    "category": "Mechanism Research / LP Assistant",
+    "summary": "用 11 页图解说明动态 LP 费率、基础收益快照与条件测算，以及用户自己签名、直接持有 Uniswap LP 的助手形态。保留 9 月 14 日数据；StablePair 尚无完整近 30 天均值。",
+    "metrics": [
+      {
+        "label": "演示文稿",
+        "value": "11 页"
+      },
+      {
+        "label": "数据日期",
+        "value": "2026-09-14"
+      }
+    ],
+    "url": "reports/stablepair-hook-2026-09-14/",
+    "languages": [
+      "zh-CN"
+    ]
+  },
+  {
     "slug": "xlayer-aave-loop-2026-09-12",
     "project": "X Layer / Aave V3",
     "title": "一笔交易如何完成 3.34× 循环贷",
